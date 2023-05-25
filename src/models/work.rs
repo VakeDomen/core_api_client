@@ -65,7 +65,7 @@ pub struct Work {
     publisher: Option<String>,
     
     #[serde(rename = "pubmedId")]
-    pubmed_id: Option<Empty>,
+    pubmed_id: Option<String>,
     
     references: Option<Vec<Reference>>,
     
