@@ -6,3 +6,6 @@ pub mod empty;
 pub mod query;
 pub mod api;
 pub mod api_builder;
+pub mod author;
+pub mod data_provider;
+pub mod link;
