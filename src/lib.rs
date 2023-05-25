@@ -1,6 +1,10 @@
 mod models;
+mod errors;
+mod helpers;
+mod responses;
 
-pub use models::work::Work;
+pub use models::api_builder::ApiBuilder;
+pub use models::query::Query;
 
 // pub fn add(left: usize, right: usize) -> usize {
 //     left + right
@@ -8,7 +12,7 @@ pub use models::work::Work;
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    // use super::*;
 
     // #[test]
     // fn it_works() {

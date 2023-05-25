@@ -2,6 +2,6 @@ use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct Journal {
-    title: String,
-    identifiers: Vec<String>
+    title: Option<String>,
+    identifiers: Option<Vec<String>>
 }

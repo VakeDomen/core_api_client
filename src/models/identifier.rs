@@ -2,6 +2,7 @@ use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct Identifier {
-    identifier: String,
-    identifier_type: String,
+    identifier: Option<String>,
+    #[serde(rename = "type")]
+    identifier_type: Option<String>,
 }
