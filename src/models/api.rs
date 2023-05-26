@@ -24,8 +24,9 @@ impl Api {
                 Ok(r) => r,
                 Err(e) => return Err(crate::errors::Error::RequestError(e)),
             };
-        self.ratelimit_remaining = extraxt_rate_limit(&response);
-        parse_response(response)
+        let (data, rate_limit) = parse_response(response)?;
+        self.ratelimit_remaining = rate_limit;
+        Ok(data)
     }
 }
 
@@ -34,16 +35,4 @@ impl From<String> for Api {
         let client = reqwest::blocking::Client::new();
         Api { key, ratelimit_remaining: None, client }
     }
-}
-
-
-fn extraxt_rate_limit(resp: &Response) -> Option<i32> {
-    if let Some(rate) = resp.headers().get("x-ratelimit-remaining") {
-        let rate_str = match rate.to_str() {
-            Ok(s) => s,
-            Err(_) => return None,
-        };
-        return rate_str.parse::<i32>().ok();
-    }
-    None
 }
