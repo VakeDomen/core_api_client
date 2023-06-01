@@ -1,4 +1,5 @@
 use reqwest::{blocking::Client, header, blocking::Response};
+use serde::de::DeserializeOwned;
 
 use crate::{helpers::response_handler::parse_response, responses::search::SearchResponse};
 
@@ -17,14 +18,14 @@ impl Api {
         self.ratelimit_remaining.clone()
     }
 
-    pub fn execute_query(&mut self, query: Query) -> Result<SearchResponse<Work>, crate::errors::Error> {
+    pub fn execute_query<T: DeserializeOwned>(&mut self, query: Query) -> Result<SearchResponse<T>, crate::errors::Error> {
         let response = match self.client.get("https://api.core.ac.uk/v3/search/works/?limit=100")
             .header(header::AUTHORIZATION, format!("Bearer {}", self.key.clone()))
             .send() {
                 Ok(r) => r,
                 Err(e) => return Err(crate::errors::Error::RequestError(e)),
             };
-        let (data, rate_limit) = parse_response(response)?;
+        let (data, rate_limit) = parse_response::<T>(response)?;
         self.ratelimit_remaining = rate_limit;
         Ok(data)
     }
