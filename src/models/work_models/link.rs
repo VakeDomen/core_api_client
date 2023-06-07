@@ -2,19 +2,24 @@ use serde::{Deserialize as Des, Serialize};
 use serde::de::{self, Deserialize, Deserializer, MapAccess, Visitor};
 use std::fmt;
 
-/// Links are wrapped in an enum since they can either be simple string links or 
-/// a structured piece of data with a link type.
+/// Links are wrapped in an enum since they can either be simple string links or a structured piece of data with a link type.
 #[derive(Debug, Serialize)]
 pub enum LinkType {
+    /// Represents a raw string link.
     Raw(String),
+
+    /// Represents a structured link.
     Structured(Link)  
 } 
 
-
+/// Struct representing a structured link.
 #[derive(Debug, Des, Serialize)]
 pub struct Link {
+    /// Type of the link.
     #[serde(rename = "type")]
     link_type: String,
+
+    /// URL of the link.
     url: String,
 }
 
