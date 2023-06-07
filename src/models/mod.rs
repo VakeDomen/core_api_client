@@ -1,11 +1,3 @@
-pub mod identifier;
-pub mod work;
-pub mod reference;
-pub mod journal;
-pub mod empty;
-pub mod query;
 pub mod api;
-pub mod api_builder;
-pub mod author;
-pub mod data_provider;
-pub mod link;
+pub mod work_models;
+pub mod query;
