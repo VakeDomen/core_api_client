@@ -1,7 +1,7 @@
-use core_api_rs::{ApiBuilder, Query, SearchType, SearchQuery, FilterOperator, Work};
+use core_api_rs::{Api, Query, SearchType, SearchQuery, FilterOperator, work::Work};
 
 fn main() {
-    let mut api = ApiBuilder::set_key("DCrZJjaUtFd1KHg3zqbRTYelO9Xs26IM".to_string());
+    let mut api = Api::from("DCrZJjaUtFd1KHg3zqbRTYelO9Xs26IM");
     let setup_query = SearchQuery::paged(3, 1)
         .and(
             FilterOperator::Exists, 
@@ -11,8 +11,8 @@ fn main() {
 
     let query = Query::Search(SearchType::Works(setup_query));
 
-    let resp = query.request();
+    // let resp = query.request();
 
-    // let resp = api.execute_query::<Work>(query);
+    let resp = api.execute_query::<Work>(query);
     println!("{:#?}", resp);
 }

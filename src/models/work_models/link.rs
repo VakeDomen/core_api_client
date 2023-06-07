@@ -1,16 +1,17 @@
-use serde::Deserialize as Des;
+use serde::{Deserialize as Des, Serialize};
 use serde::de::{self, Deserialize, Deserializer, MapAccess, Visitor};
 use std::fmt;
 
-
-#[derive(Debug)]
+/// Links are wrapped in an enum since they can either be simple string links or 
+/// a structured piece of data with a link type.
+#[derive(Debug, Serialize)]
 pub enum LinkType {
     Raw(String),
     Structured(Link)  
 } 
 
 
-#[derive(Debug, Des)]
+#[derive(Debug, Des, Serialize)]
 pub struct Link {
     #[serde(rename = "type")]
     link_type: String,

@@ -3,16 +3,13 @@ mod errors;
 mod helpers;
 mod responses;
 
-pub use models::api_builder::ApiBuilder;
+pub use models::api::Api;
 pub use models::query::Query;
 pub use models::query::SearchQuery;
 pub use models::query::SearchType;
 pub use models::query::FilterOperator;
-pub use models::work::Work;
+pub use models::work_models::*;
 
-// pub fn add(left: usize, right: usize) -> usize {
-//     left + right
-// }
 
 #[cfg(test)]
 mod tests {
