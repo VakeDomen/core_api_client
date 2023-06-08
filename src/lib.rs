@@ -6,7 +6,6 @@ mod responses;
 pub use models::api::Api;
 pub use models::query::Query;
 pub use models::query::SearchQuery;
-pub use models::query::SearchType;
 pub use models::query::FilterOperator;
 pub use models::work_models::*;
 

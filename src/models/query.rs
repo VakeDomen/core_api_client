@@ -1,36 +1,41 @@
-use std::fmt::format;
-
 #[derive(Debug)]
-pub enum FilterOperator {
-    Smaller,
-    Bigger,
-    Eq,
-    SmallerEq,
-    BiggerEq,    
-    Exists
+pub enum FilterOperator<T1, T2>
+where
+    T1: ToString,
+    T2: ToString,
+{
+    Smaller(T1, T2),
+    Bigger(T1, T2),
+    Eq(T1, T2),
+    SmallerEq(T1, T2),
+    BiggerEq(T1, T2),
+    Exists(T1),
 }
 
 #[derive(Debug)]
-pub enum Query {
+pub enum Query<T1, T2>
+where
+    T1: ToString,
+    T2: ToString,
+{
     DataProviders(String),
     Discovery,
     ExpertFinder,
     Journals(String),
     Outputs(String),
-    Search(SearchType),
+    SearchWorks(SearchQuery<T1, T2>),
+    SearchOutputs(SearchQuery<T1, T2>),
+    SearchDataProviders(SearchQuery<T1, T2>),
+    SearchJournals(SearchQuery<T1, T2>),
 }
 
 #[derive(Debug)]
-pub enum SearchType {
-    Works(SearchQuery),
-    Outputs(SearchQuery),
-    DataProviders(SearchQuery),
-    Journals(SearchQuery),
-}
-
-#[derive(Debug)]
-pub struct SearchQuery {
-    filters: Vec<Filter>,
+pub struct SearchQuery<T1, T2>
+where
+    T1: ToString,
+    T2: ToString,
+{
+    filters: Vec<Filter<T1, T2>>,
     limit: Option<i32>,
     offset: Option<i32>,
     scroll: Option<bool>,
@@ -50,11 +55,27 @@ pub enum QueryRequestType {
 }
 
 #[derive(Debug)]
-struct Filter {
+struct Filter<T1, T2>
+where
+    T1: ToString,
+    T2: ToString, 
+{
     logical_operator: LogicalOperator,
-    filter_operator: FilterOperator,
-    key: String,
-    value: Option<String>,
+    filter_operator: FilterOperator<T1, T2>,
+}
+
+impl<T1, T2> Filter<T1, T2>
+where
+    T1: ToString,
+    T2: ToString,
+{
+    fn parse(self) -> String {
+        format!(
+            "{}{}", 
+            self.logical_operator.parse(), 
+            self.filter_operator.parse()
+        )
+    }
 }
 
 impl LogicalOperator {
@@ -66,21 +87,28 @@ impl LogicalOperator {
     }
 }
 
-impl Filter {
-    fn parse(self) -> (LogicalOperator, String) {
-        let filter_query = match self.filter_operator {
-            FilterOperator::Smaller => format!("{}<{}", self.key, self.value.unwrap_or("".to_string())),
-            FilterOperator::Bigger => format!("{}>{}", self.key, self.value.unwrap_or("".to_string())),
-            FilterOperator::Eq => format!("{}={}", self.key, self.value.unwrap_or("".to_string())),
-            FilterOperator::SmallerEq => format!("{}<={}", self.key, self.value.unwrap_or("".to_string())),
-            FilterOperator::BiggerEq => format!("{}>={}", self.key, self.value.unwrap_or("".to_string())),
-            FilterOperator::Exists => format!("exists={}", self.key),
-        };
-        (self.logical_operator, filter_query)
+impl<T1, T2> FilterOperator<T1, T2>
+where
+    T1: ToString,
+    T2: ToString, 
+{
+    fn parse(self) -> String {
+        match self {
+            FilterOperator::Smaller(key, value) => format!("{}<{}", key.to_string(), value.to_string()),
+            FilterOperator::Bigger(key, value) => format!("{}>{}", key.to_string(), value.to_string()),
+            FilterOperator::Eq(key, value) => format!("{}={}", key.to_string(), value.to_string()),
+            FilterOperator::SmallerEq(key, value) => format!("{}<={}", key.to_string(), value.to_string()),
+            FilterOperator::BiggerEq(key, value) => format!("{}>={}", key.to_string(), value.to_string()),
+            FilterOperator::Exists(key) => format!("exists={}", key.to_string()),
+        }
     }
 }
 
-impl SearchQuery {
+impl<T1, T2> SearchQuery <T1, T2>
+where
+    T1: ToString,
+    T2: ToString, 
+{
     pub fn paged(limit: i32, offset: i32) -> Self {
         Self { 
             filters: Default::default(), 
@@ -92,7 +120,11 @@ impl SearchQuery {
     }
 }
 
-impl Default for SearchQuery {
+impl<T1, T2> Default for SearchQuery<T1, T2>
+where
+    T1: ToString,
+    T2: ToString,  
+{
     fn default() -> Self {
         Self { 
             filters: Default::default(), 
@@ -104,22 +136,22 @@ impl Default for SearchQuery {
     }
 }
 
-impl SearchQuery {
-    pub fn and(mut self, operator: FilterOperator, key: String, value: Option<String>) -> Self {
+impl<T1, T2> SearchQuery<T1, T2>
+where
+    T1: ToString,
+    T2: ToString, 
+{
+    pub fn and(mut self, operator: FilterOperator<T1, T2>) -> Self {
         self.filters.push(Filter { 
             logical_operator: LogicalOperator::And, 
             filter_operator: operator, 
-            key, 
-            value 
         });
         self
     }
-    pub fn or(mut self, operator: FilterOperator, key: String, value: Option<String>) -> Self {
+    pub fn or(mut self, operator: FilterOperator<T1, T2>) -> Self {
         self.filters.push(Filter { 
             logical_operator: LogicalOperator::Or, 
             filter_operator: operator, 
-            key, 
-            value 
         });
         self
     }
@@ -144,38 +176,30 @@ impl SearchQuery {
             final_filter = format!("{}&q=", final_filter);
         }
         for filter in self.filters.into_iter() {
-            let (op, query) = filter.parse();
-            if final_filter.eq("?") {
-                final_filter = format!("{}{}", final_filter, query);
-            } else {
-                final_filter = format!("{}{}{}", final_filter, op.parse(), query)
-            }
+            let query = filter.parse();
+            final_filter = format!("{}{}", final_filter, query);
         }
         final_filter
     }
 }
 
 
-impl Query {
-    pub fn request(self) -> (QueryRequestType, String) {
+impl<T1, T2> Query<T1, T2>
+where
+    T1: ToString,
+    T2: ToString, 
+{
+    pub fn parse_request(self) -> (QueryRequestType, String) {
         match self {
             Query::DataProviders(id) => (QueryRequestType::Get, format!("data-providers/{}", id)),
             Query::Discovery => (QueryRequestType::Post, "discover".to_string()),
             Query::ExpertFinder => (QueryRequestType::Post, "labs/expert-finder".to_string()),
             Query::Journals(id) => (QueryRequestType::Get, format!("journals/{}", id)),
             Query::Outputs(id) => (QueryRequestType::Get, format!("outputs/{}", id)),
-            Query::Search(s) => (QueryRequestType::Get, parse_search_query(s)),
+            Query::SearchWorks(sq) => (QueryRequestType::Get, format!("search/works/{}", sq.parse())),
+            Query::SearchOutputs(sq) => (QueryRequestType::Get, format!("search/outputs/{}", sq.parse())),
+            Query::SearchDataProviders(sq) => (QueryRequestType::Get, format!("search/data-providers/{}", sq.parse())),
+            Query::SearchJournals(sq) => (QueryRequestType::Get, format!("search/journals/{}", sq.parse())),
         }
     }
-}
-
-fn parse_search_query(st: SearchType) -> String {
-    let (route, query) = match st {
-        SearchType::Works(sq) => ("works".to_string(), sq),
-        SearchType::Outputs(sq) => ("outputs".to_string(), sq),
-        SearchType::DataProviders(sq) => ("data-providers".to_string(), sq),
-        SearchType::Journals(sq) => ("journals".to_string(), sq),
-    };
-    let query_string = query.parse();
-    format!("search/{}/{}", route, query_string)
 }
