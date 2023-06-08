@@ -37,8 +37,24 @@ impl Api {
         self.ratelimit_remaining.clone()
     }
 
-    pub fn execute_query<T: DeserializeOwned>(&mut self, query: Query) -> Result<SearchResponse<T>, crate::errors::Error> {
-        let response = match self.client.get("https://api.core.ac.uk/v3/search/works/?limit=100")
+    pub fn execute_query<T, T1, T2>(
+        &mut self, 
+        query: Query<T1, T2>
+    ) -> Result<SearchResponse<T>, crate::errors::Error> 
+    where 
+        T: DeserializeOwned,
+        T1: ToString,
+        T2: ToString,
+    {
+
+        let (req_type, query_uri) = query.parse_request();
+        let uri = format!("https://api.core.ac.uk/v3/{}", query_uri);
+
+        let client_builer = match req_type {
+            super::query::QueryRequestType::Get => self.client.get(uri),
+            super::query::QueryRequestType::Post => self.client.post(uri),
+        };
+        let response = match client_builer
             .header(header::AUTHORIZATION, format!("Bearer {}", self.key.clone()))
             .send() {
                 Ok(r) => r,
