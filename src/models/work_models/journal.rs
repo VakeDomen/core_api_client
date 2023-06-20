@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Journal {
     /// Title of the journal.
-    title: String,
+    title: Option<String>,
     
     /// List of identifiers associated with the journal.
     identifiers: Vec<String>,

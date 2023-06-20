@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FilterOperator<T1, T2>
 where
     T1: ToString,
@@ -12,7 +12,7 @@ where
     Exists(T1),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Query<T1, T2>
 where
     T1: ToString,
@@ -29,8 +29,8 @@ where
     SearchJournals(SearchQuery<T1, T2>),
 }
 
-#[derive(Debug)]
-pub struct SearchQuery<T1, T2>
+#[derive(Debug, Clone)]
+pub struct SearchQuery<T1, T2 = String>
 where
     T1: ToString,
     T2: ToString,
@@ -42,7 +42,7 @@ where
     stats: Option<bool>
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum LogicalOperator {
     And,
     Or,
@@ -54,7 +54,7 @@ pub enum QueryRequestType {
     Post,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Filter<T1, T2>
 where
     T1: ToString,
@@ -109,7 +109,7 @@ where
     T1: ToString,
     T2: ToString, 
 {
-    pub fn paged(limit: i32, offset: i32) -> Self {
+    pub(crate) fn paged(limit: i32, offset: i32) -> Self {
         Self { 
             filters: Default::default(), 
             limit: Some(limit), 
