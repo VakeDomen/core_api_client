@@ -1,6 +1,8 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize, de::DeserializeOwned};
 
-#[derive(Debug, Deserialize)]
+use super::response::ApiResponseTrait;
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct SearchResponse<T> {
     
     #[serde(rename = "totalHits")]
@@ -10,6 +12,7 @@ pub struct SearchResponse<T> {
 	#[serde(deserialize_with = "deserialize_limit")]
     limit: Option<i32>,
 	
+    #[serde(deserialize_with = "deserialize_limit")]
     offset: Option<i32>,
 	
     #[serde(rename = "scrollId")]
@@ -25,6 +28,7 @@ pub struct SearchResponse<T> {
 
 
 
+impl<T: DeserializeOwned> ApiResponseTrait for SearchResponse<T> {}
 
 fn deserialize_limit<'de, D>(deserializer: D) -> Result<Option<i32>, D::Error>
 where
