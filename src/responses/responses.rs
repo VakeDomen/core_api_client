@@ -5,7 +5,7 @@ use crate::work::Work;
 use super::{search::SearchResponse, response::ApiResponseTrait};
 
 #[derive(Debug, Serialize, Deserialize)]
-pub enum ApiResponseEnum {
+pub enum ApiResponseType {
     DataProviders(DataProvidersResponse),
     Discovery(DiscoveryResponse),
     ExpertFinder(ExpertFinderResponse),

@@ -4,13 +4,12 @@ use serde_json::Deserializer;
 use serde_path_to_error::deserialize;
 use crate::{
     helpers::response_handler::{parse_raw_response}, 
-    responses::{response::ApiResponse, responses::ApiResponseEnum, search::SearchResponse}, 
-    SearchQuery, work::Work, errors::Error
+    responses::{response::ApiResponse, responses::ApiResponseType}, 
+    SearchQuery, errors::Error
 };
 use super::query::Query;
 
 /// Main API struct. API holds your key you acquire from [CORE](https://core.ac.uk/services/api#form). 
-/// Also it tracks how many uses of the API you have left based on the rate limit oposed by CORE.
 /// Lastly it holds a refernce to a blocking Client it uses to execute queries to the CORE API.
 /// 
 #[derive(Debug)]
@@ -45,19 +44,17 @@ impl Api {
             };
         let (data, rate_limit) = parse_raw_response(response)?;
         let deserialized_response = match query_retained {
-            Query::DataProviders(_) => ApiResponseEnum::DataProviders(parse_json(&data)?),
-            Query::Discovery => ApiResponseEnum::Discovery(parse_json(&data)?),
-            Query::ExpertFinder => ApiResponseEnum::ExpertFinder(parse_json(&data)?),
-            Query::Journals(_) => ApiResponseEnum::Journals(parse_json(&data)?),
-            Query::Outputs(_) => ApiResponseEnum::Outputs(parse_json(&data)?),
-            Query::SearchWorks(_) => ApiResponseEnum::SearchWorks(parse_json(&data)?),
-            Query::SearchOutputs(_) => ApiResponseEnum::SearchOutputs(parse_json(&data)?),
-            Query::SearchDataProviders(_) => ApiResponseEnum::SearchDataProviders(parse_json(&data)?),
-            Query::SearchJournals(_) => ApiResponseEnum::SearchJournals(parse_json(&data)?),
+            Query::DataProviders(_) => ApiResponseType::DataProviders(parse_json(&data)?),
+            Query::Discovery => ApiResponseType::Discovery(parse_json(&data)?),
+            Query::ExpertFinder => ApiResponseType::ExpertFinder(parse_json(&data)?),
+            Query::Journals(_) => ApiResponseType::Journals(parse_json(&data)?),
+            Query::Outputs(_) => ApiResponseType::Outputs(parse_json(&data)?),
+            Query::SearchWorks(_) => ApiResponseType::SearchWorks(parse_json(&data)?),
+            Query::SearchOutputs(_) => ApiResponseType::SearchOutputs(parse_json(&data)?),
+            Query::SearchDataProviders(_) => ApiResponseType::SearchDataProviders(parse_json(&data)?),
+            Query::SearchJournals(_) => ApiResponseType::SearchJournals(parse_json(&data)?),
         };
     
-
-        // self
         Ok(ApiResponse {
             ratelimit_remaining: rate_limit,
             response: deserialized_response,
