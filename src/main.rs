@@ -1,8 +1,7 @@
-use core_api_rs::{Api,FilterOperator, Query};
+use core_api_rs::{Api,Query, FilterOperator};
 
 use chrono::{Utc, Duration, DateTime, NaiveDate};
 use std::cell::RefCell;
-use std::fmt::Write;
 
 
 enum Test {

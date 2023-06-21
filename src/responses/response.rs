@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize, de::DeserializeOwned};
 
-use super::responses::ApiResponseEnum;
+use super::responses::ApiResponseType;
 
 pub trait ApiResponseTrait: DeserializeOwned {}
 
@@ -10,5 +10,5 @@ pub trait ApiResponseTrait: DeserializeOwned {}
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ApiResponse {
     pub ratelimit_remaining: Option<i32>,
-    pub response: ApiResponseEnum
+    pub response: ApiResponseType
 }
