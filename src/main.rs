@@ -11,7 +11,7 @@ enum Test {
 
 fn main() {
     let todo = Test::Execute;
-    let dates = match DateIterator::new("2020-08-20") {
+    let dates = match DateIterator::new("2021-09-20") {
         Ok(c) => c,
         Err(e) => {
             println!("Error creating date iterator: {:#?}", e);
@@ -22,33 +22,40 @@ fn main() {
     let mut tommorow = dates.next();
     let api = Api::from("DCrZJjaUtFd1KHg3zqbRTYelO9Xs26IM");
 
-    for _ in 0..10 {
-        let setup_query = api.paged(3, 1)
-            .and(FilterOperator::Exists("doi".to_string()))
-            .and(FilterOperator::Bigger("createdDate".into(), &today))
-            .and(FilterOperator::Smaller("createdDate".into(), &tommorow));
-        let query = Query::SearchWorks(setup_query);
+    // for _ in 0..10 {
+    //     let setup_query = api.paged_search(20, 1)
+    //         .and(FilterOperator::Exists("name".to_string()))
+    //         .and(FilterOperator::Bigger("createdDate".into(), &today))
+    //         .and(FilterOperator::Smaller("createdDate".into(), &tommorow));
+    //     let query = Query::SearchDataProviders(setup_query);
     
-        match todo {
-            Test::Execute => {
-                let resp = api.execute_query(query);
-                if let Err(e) = resp {
-                    println!("{:#?}", e);
-                } else {
-                    println!("Trys left: {:#?}", resp.unwrap().ratelimit_remaining);
-                }
-            },
-            Test::Log => {
-                let resp = query.parse_request();
-                println!("{:#?}", resp);
-            },
-        }
-        today = tommorow;
-        tommorow = dates.next();
-    } 
+    //     match todo {
+    //         Test::Execute => {
+    //             let resp = api.execute_query(query);
+    //             if let Err(e) = resp {
+    //                 println!("{:#?}", e);
+    //             } else {
+    //                 println!("Trys left: {:#?}", resp.unwrap().ratelimit_remaining);
+    //             }
+    //         },
+    //         Test::Log => {
+    //             let resp = query.parse_request();
+    //             println!("{:#?}", resp);
+    //         },
+    //     }
+    //     today = tommorow;
+    //     tommorow = dates.next();
+    // } 
 
-    
-    
+    let setup_query = api.paged_search::<String>(200, 1651);
+    let query = Query::SearchDataProviders(setup_query);    
+    let resp = api.execute_query(query);
+    println!("{:#?}", resp);
+    if let Err(e) = resp {
+        println!("{:#?}", e);
+    } else {
+        println!("Trys left: {:#?}", resp.unwrap().ratelimit_remaining);
+    }
     
 }
 
