@@ -43,6 +43,7 @@ impl Api {
                 Err(e) => return Err(crate::errors::Error::RequestError(e)),
             };
         let (data, rate_limit) = parse_raw_response(response)?;
+        println!("{:#?}", data);
         let deserialized_response = match query_retained {
             Query::DataProviders(_) => ApiResponseType::DataProviders(parse_json(&data)?),
             Query::Discovery => ApiResponseType::Discovery(parse_json(&data)?),
@@ -61,7 +62,7 @@ impl Api {
         })
     }
 
-    pub fn paged<T>(&self, limit: i32, offset: i32) -> SearchQuery<String, T> where T:ToString {
+    pub fn paged_search<T>(&self, limit: i32, offset: i32) -> SearchQuery<String, T> where T:ToString {
         SearchQuery::paged(limit, offset)
     }
 }
