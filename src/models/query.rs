@@ -10,6 +10,7 @@ where
     SmallerEq(T1, T2),
     BiggerEq(T1, T2),
     Exists(T1),
+    HasValue(T1, T2),
 }
 
 #[derive(Debug, Clone)]
@@ -99,7 +100,8 @@ where
             FilterOperator::Eq(key, value) => format!("{}={}", key.to_string(), value.to_string()),
             FilterOperator::SmallerEq(key, value) => format!("{}<={}", key.to_string(), value.to_string()),
             FilterOperator::BiggerEq(key, value) => format!("{}>={}", key.to_string(), value.to_string()),
-            FilterOperator::Exists(key) => format!("exists={}", key.to_string()),
+            FilterOperator::Exists(key) => format!("_exists_:{}", key.to_string()),
+            FilterOperator::HasValue(key, value) => format!("{}:{}", key.to_string(), value.to_string()),
         }
     }
 }

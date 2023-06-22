@@ -20,7 +20,9 @@ fn main() {
     };
     let mut today = dates.next();
     let mut tommorow = dates.next();
-    let api = Api::from("DCrZJjaUtFd1KHg3zqbRTYelO9Xs26IM");
+    let api = Api::from("DCrZJjaUtFd1KHg3zqbRTYelO9Xs26IM")
+        .log_target(true)
+        .log_raw_response(false);
 
     // for _ in 0..10 {
     //     let setup_query = api.paged_search(20, 1)
@@ -47,9 +49,10 @@ fn main() {
     //     tommorow = dates.next();
     // } 
 
-    let setup_query = api.paged_search::<String>(200, 1651);
-    let query = Query::SearchDataProviders(setup_query);    
-    let resp = api.execute_query(query);
+    let query = api.paged_search(10, 0)
+        .and(FilterOperator::Exists("doi"))
+        .and(FilterOperator::Bigger("citationCount", 20));
+    let resp = api.search_works(query);
     println!("{:#?}", resp);
     if let Err(e) = resp {
         println!("{:#?}", e);
