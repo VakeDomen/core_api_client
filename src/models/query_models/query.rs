@@ -3,7 +3,7 @@ use std::fmt::Display;
 use super::{search_query::SearchQuery, request_type::QueryRequestType};
 
 #[derive(Debug, Clone)]
-pub enum Query<T1, T2>
+pub(crate) enum Query<T1, T2>
 where
     T1: ToString,
     T2: ToString,

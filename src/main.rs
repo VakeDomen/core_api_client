@@ -1,4 +1,4 @@
-use core_api_rs::{Api,Query, FilterOperator};
+use core_api_rs::{Api, FilterOperator};
 
 use chrono::{Utc, Duration, DateTime, NaiveDate};
 use std::cell::RefCell;
