@@ -4,7 +4,8 @@ use crate::{
     responses::{response::ApiResponse, responses::ApiResponseType}, 
     SearchQuery,
 };
-use super::query::Query;
+
+use super::query_models::{query::Query, request_type::QueryRequestType};
 
 /// Main API struct. API holds your key you acquire from [CORE](https://core.ac.uk/services/api#form). 
 /// Lastly it holds a refernce to a blocking Client it uses to execute queries to the CORE API.
@@ -209,8 +210,8 @@ impl Api {
         let uri = format!("https://api.core.ac.uk/v3/{}", query_uri);
 
         let client_builer = match req_type {
-            super::query::QueryRequestType::Get => self.client.get(uri),
-            super::query::QueryRequestType::Post => self.client.post(uri),
+            QueryRequestType::Get => self.client.get(uri),
+            QueryRequestType::Post => self.client.post(uri),
         };
         let response = match client_builer
             .header(header::AUTHORIZATION, format!("Bearer {}", self.key.clone()))
