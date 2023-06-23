@@ -2,6 +2,26 @@ use std::fmt::Display;
 
 use super::{search_query::SearchQuery, request_type::QueryRequestType};
 
+/// The `Query` enum represents various types of API requests that can be executed using the client. 
+/// Each variant of the `Query` enum corresponds to a different endpoint of the API.
+///
+/// `Query` contains a range of operations including but not limited to fetching data from specific data providers,
+/// performing search operations across different types of works, outputs, journals and data providers.
+/// 
+/// # Variants
+/// * `DataProviders(String)`: Represents a request to the data-providers endpoint with a given identifier.
+/// * `Discovery`: Represents a discovery request.
+/// * `ExpertFinder`: Represents an expert finder request.
+/// * `Journals(String)`: Represents a request to the journals endpoint with a given identifier.
+/// * `Outputs(String)`: Represents a request to the outputs endpoint with a given identifier.
+/// * `SearchWorks(SearchQuery<T1, T2>)`: Represents a search request for works.
+/// * `SearchOutputs(SearchQuery<T1, T2>)`: Represents a search request for outputs.
+/// * `SearchDataProviders(SearchQuery<T1, T2>)`: Represents a search request for data providers.
+/// * `SearchJournals(SearchQuery<T1, T2>)`: Represents a search request for journals.
+///
+/// # Methods
+/// `parse_request`: This method processes a `Query` variant and returns the corresponding API endpoint and HTTP method.
+///
 #[derive(Debug, Clone)]
 pub(crate) enum Query<T1, T2>
 where
@@ -40,6 +60,8 @@ where
     }
 }
 
+/// `StringDefault` is a helper struct that implements the `Display` trait.
+/// It doesn't hold any data and it always prints an empty string.
 #[derive(Clone)]
 pub struct StringDefault {}
 impl Display for StringDefault {

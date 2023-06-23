@@ -49,15 +49,17 @@ fn main() {
     //     tommorow = dates.next();
     // } 
 
-    let query = api.paged_search(2000, 0)
+    let query = api.paged_search(200, 0)
         .and(FilterOperator::Eq("publisher", "OJS"));
-    let resp = api.search_outputs(query);
-    // println!("{:#?}", resp);
-    if let Err(e) = resp {
-        println!("{:#?}", e);
-    } else {
-        println!("Trys left: {:#?}", resp.unwrap().ratelimit_remaining);
-    }
+
+    println!("{}", query.parse());
+    // let resp = api.search_outputs(query);
+    // // println!("{:#?}", resp);
+    // if let Err(e) = resp {
+    //     println!("{:#?}", e);
+    // } else {
+    //     println!("Trys left: {:#?}", resp.unwrap().ratelimit_remaining);
+    // }
     
 }
 

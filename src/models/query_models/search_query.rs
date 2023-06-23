@@ -55,6 +55,22 @@ where
     T1: ToString,
     T2: ToString, 
 {
+    /// Adds a filter to the `SearchQuery` with an AND logical operator.
+    ///
+    /// # Arguments
+    ///
+    /// * `operator: FilterOperator<T1, T2>` - The filter operator and its associated values to be added to the search query.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use core_api_rs::{Api, SearchQuery, FilterOperator};
+    /// 
+    /// let api = Api::from("API_KEY");
+    /// let query = api.paged_search(10, 0)
+    ///     .and(FilterOperator::Exists("doi"))
+    ///     .and(FilterOperator::Bigger("citationCount", 20));
+    /// ```
     pub fn and(mut self, operator: FilterOperator<T1, T2>) -> Self {
         self.filters.push(Filter { 
             logical_operator: LogicalOperator::And, 
@@ -62,6 +78,23 @@ where
         });
         self
     }
+
+    /// Adds a filter to the `SearchQuery` with an OR logical operator.
+    ///
+    /// # Arguments
+    ///
+    /// * `operator: FilterOperator<T1, T2>` - The filter operator and its associated values to be added to the search query.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use core_api_rs::{Api, SearchQuery, FilterOperator};
+    /// 
+    /// let api = Api::from("API_KEY");
+    /// let query = api.paged_search(10, 0)
+    ///     .or(FilterOperator::Exists("doi"))
+    ///     .or(FilterOperator::Bigger("citationCount", 20));
+    /// ```
     pub fn or(mut self, operator: FilterOperator<T1, T2>) -> Self {
         self.filters.push(Filter { 
             logical_operator: LogicalOperator::Or, 
@@ -69,7 +102,28 @@ where
         });
         self
     }
-    pub(crate) fn parse(self) -> String {
+
+    /// Converts the `SearchQuery` instance into a string that represents a valid URL query string. 
+    ///
+    /// This method concatenates all added filters with their corresponding logical operators, and includes
+    /// additional parameters like `limit`, `offset`, `scroll` and `stats`, if they are present.
+    ///
+    /// # Returns
+    ///
+    /// * `String` - The resulting URL query string.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use core_api_rs::{Api, SearchQuery, FilterOperator};
+    /// 
+    /// let api = Api::from("API_KEY");
+    /// let query = api.paged_search(10, 0)
+    ///     .and(FilterOperator::Eq("publisher", "OJS"));
+    ///
+    /// assert_eq!("?limit=10&offset=0&q=%20AND%20publisher=OJS".to_string(), query.parse());
+    /// ```
+    pub fn parse(self) -> String {
         let mut final_filter = "?".to_string();
         if let Some(l) = self.limit {
             final_filter = format!("{}limit={}", final_filter, l);
