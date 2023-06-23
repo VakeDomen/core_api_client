@@ -12,7 +12,7 @@ pub enum ApiResponseType {
     Journals(JournalsResponse),
     Outputs(OutputsResponse),
     SearchWorks(SearchResponse<Work>),
-    SearchOutputs(SearchResponse<Outputs>),
+    SearchOutputs(SearchResponse<Work>),
     SearchDataProviders(SearchResponse<DataProvider>),
     SearchJournals(SearchResponse<Journal>),
 }
