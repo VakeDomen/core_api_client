@@ -1,11 +1,8 @@
 use reqwest::{blocking::Client, header};
-use serde::de::DeserializeOwned;
-use serde_json::Deserializer;
-use serde_path_to_error::deserialize;
 use crate::{
-    helpers::response_handler::{parse_raw_response}, 
+    helpers::response_handler::{parse_raw_response, parse_json}, 
     responses::{response::ApiResponse, responses::ApiResponseType}, 
-    SearchQuery, errors::Error
+    SearchQuery,
 };
 use super::query::Query;
 
@@ -183,14 +180,5 @@ impl<T: Into<String>> From<T> for Api {
     fn from(key: T) -> Self {
         let client = reqwest::blocking::Client::new();
         Api { key: key.into(), client, log_target: false, log_raw_response: false }
-    }
-}
-
-fn parse_json<T>(data: &str) -> Result<T, crate::errors::Error> where T: DeserializeOwned {
-    let deserializer = &mut Deserializer::from_str(&data);
-    let res: Result<T, _> = deserialize(deserializer);
-    match res {
-        Ok(parsed_data) => Ok(parsed_data),
-        Err(e) => return Err(Error::ParsingError(e.to_string())),
     }
 }

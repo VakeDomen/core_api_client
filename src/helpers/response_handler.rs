@@ -1,4 +1,9 @@
 use reqwest::{blocking::Response, StatusCode};
+use serde::de::DeserializeOwned;
+use serde_json::Deserializer;
+use serde_path_to_error::deserialize;
+
+use crate::errors::Error;
 
 
 pub(crate) fn parse_raw_response(
@@ -16,6 +21,15 @@ pub(crate) fn parse_raw_response(
     match resp.text() {
         Ok(t) => Ok((t, rate_limit)),
         Err(e) => Err(crate::errors::Error::RequestError(e)),
+    }
+}
+
+pub(crate) fn parse_json<T>(data: &str) -> Result<T, crate::errors::Error> where T: DeserializeOwned {
+    let deserializer = &mut Deserializer::from_str(&data);
+    let res: Result<T, _> = deserialize(deserializer);
+    match res {
+        Ok(parsed_data) => Ok(parsed_data),
+        Err(e) => return Err(Error::ParsingError(e.to_string())),
     }
 }
 
