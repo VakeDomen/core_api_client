@@ -4,9 +4,9 @@ mod helpers;
 mod responses;
 
 pub use models::api::Api;
-pub use models::query::Query;
-pub use models::query::SearchQuery;
-pub use models::query::FilterOperator;
+pub use models::query_models::query::Query;
+pub use models::query_models::search_query::SearchQuery;
+pub use models::query_models::filter_operator::FilterOperator;
 pub use responses::responses::ApiResponseType;
 pub use models::work_models::*;
 
