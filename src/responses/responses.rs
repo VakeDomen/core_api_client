@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 
-use crate::{work::Work, models::data_provider_models::data_provider::DataProvider};
+use crate::{work::Work, models::data_provider_models::data_provider::DataProvider, journal::Journal};
 
 use super::{search::SearchResponse, response::ApiResponseTrait};
 
@@ -14,7 +14,7 @@ pub enum ApiResponseType {
     SearchWorks(SearchResponse<Work>),
     SearchOutputs(SearchResponse<Outputs>),
     SearchDataProviders(SearchResponse<DataProvider>),
-    SearchJournals(SearchResponse<Journals>),
+    SearchJournals(SearchResponse<Journal>),
 }
 
 // Assume all of these types implement DeserializeOwned
@@ -44,5 +44,3 @@ impl ApiResponseTrait for OutputsResponse {}
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Outputs;
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Journals;

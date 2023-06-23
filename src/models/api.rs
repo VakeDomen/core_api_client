@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use reqwest::{blocking::Client, header};
 use crate::{
     helpers::response_handler::{parse_raw_response, parse_json}, 
@@ -95,13 +97,13 @@ impl Api {
     
 
     
-    pub fn paged_search<T1, T2>(
+    pub fn paged_search<T1 , T2>(
         &self, limit: i32, 
         offset: i32
     ) -> SearchQuery<T1, T2> 
     where 
         T1:ToString, 
-        T2:ToString 
+        T2:ToString, 
     {
         SearchQuery::paged(limit, offset)
     }
