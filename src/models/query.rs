@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 #[derive(Debug, Clone)]
 pub enum FilterOperator<T1, T2>
 where
@@ -31,7 +33,7 @@ where
 }
 
 #[derive(Debug, Clone)]
-pub struct SearchQuery<T1, T2 = String>
+pub struct SearchQuery<T1 = String, T2 = String>
 where
     T1: ToString,
     T2: ToString,
@@ -203,5 +205,13 @@ where
             Query::SearchDataProviders(sq) => (QueryRequestType::Get, format!("search/data-providers/{}", sq.parse())),
             Query::SearchJournals(sq) => (QueryRequestType::Get, format!("search/journals/{}", sq.parse())),
         }
+    }
+}
+
+#[derive(Clone)]
+pub struct StringDefault {}
+impl Display for StringDefault {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        Ok(())
     }
 }

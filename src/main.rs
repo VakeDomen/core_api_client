@@ -22,7 +22,7 @@ fn main() {
     let mut tommorow = dates.next();
     let api = Api::from("DCrZJjaUtFd1KHg3zqbRTYelO9Xs26IM")
         .log_target(true)
-        .log_raw_response(false);
+        .log_raw_response(true);
 
     // for _ in 0..10 {
     //     let setup_query = api.paged_search(20, 1)
@@ -49,10 +49,8 @@ fn main() {
     //     tommorow = dates.next();
     // } 
 
-    let query = api.paged_search(10, 0)
-        .and(FilterOperator::Exists("doi"))
-        .and(FilterOperator::Bigger("citationCount", 20));
-    let resp = api.search_works(query);
+    let query = api.paged_search::<String, String>(500, 0);
+    let resp = api.search_outputs(query);
     println!("{:#?}", resp);
     if let Err(e) = resp {
         println!("{:#?}", e);
