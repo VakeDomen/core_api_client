@@ -1,4 +1,6 @@
-use serde::{Deserialize, Serialize, Deserializer};
+use serde::{Deserialize, Serialize};
+
+use crate::helpers::string_number_deserializer::deserialize_as_string;
 
 /// Represents a type of identifier.
 #[derive(Debug, Serialize, Deserialize)]
@@ -9,17 +11,4 @@ pub struct IdentifierType {
     
     /// All forms of the identifier
     pub all: Option<String>,
-}
-
-/// Custom deserialization function that always deserializes as a string
-fn deserialize_as_string<'de, D>(deserializer: D) -> Result<Option<String>, D::Error>
-where
-    D: Deserializer<'de>,
-{
-    let opt = Option::deserialize(deserializer)?;
-    match opt {
-        Some(serde_json::Value::Number(n)) => Ok(Some(n.to_string())),
-        Some(serde_json::Value::String(s)) => Ok(Some(s)),
-        _ => Ok(None),
-    }
 }

@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 
-use crate::empty::Empty;
+use crate::{empty::Empty, identifier::IdentifierEntry, helpers::string_number_deserializer::deserialize_as_string};
 
-use super::{identifier::Identifier, reference::Reference, journal::Journal, author::Author, data_provider::DataProvider, link::LinkType};
+use super::{reference::Reference, journal::Journal, author::Author, data_provider::DataProvider, link::LinkType};
 
 
 /// Struct holds the work information. More info on the work struct [here](https://api.core.ac.uk/docs/v3#tag/Works/null) 
@@ -68,7 +68,7 @@ pub struct Work {
     pub id: Option<i32>,
 
     /// List of identifiers associated with the work
-    pub identifiers: Option<Vec<Identifier>>,
+    pub identifiers: Option<IdentifierEntry>,
 
     /// Title of the work
     pub title: Option<String>,
@@ -110,8 +110,8 @@ pub struct Work {
     pub updated_date: Option<String>,
 
     /// Year the work was published
-    #[serde(rename = "yearPublished")]
-    pub year_published: Option<i32>,
+    #[serde(rename = "yearPublished", deserialize_with="deserialize_as_string", default)]
+    pub year_published: Option<String>,
         
     // List of links associated with the work
     pub links: Option<Vec<LinkType>>,

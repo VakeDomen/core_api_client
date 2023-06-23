@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 use reqwest::{blocking::Client, header};
 use crate::{
     helpers::response_handler::{parse_raw_response, parse_json}, 
@@ -10,7 +8,20 @@ use super::query::Query;
 
 /// Main API struct. API holds your key you acquire from [CORE](https://core.ac.uk/services/api#form). 
 /// Lastly it holds a refernce to a blocking Client it uses to execute queries to the CORE API.
-/// 
+/// The `Api` struct provides a set of methods to interact with a specific API service.
+/// It includes methods to search for works, data providers, journals, and outputs based on various queries.
+/// The struct uses an API key and an HTTP client for requests, and optionally logs the request target and raw response.
+///
+/// Key methods include:
+/// * `search_works()`: Executes a search for research works.
+/// * `search_data_providers()`: Executes a search for data providers.
+/// * `search_journals()`: Executes a search for journal titles.
+/// * `search_outputs()`: Executes a search for work outputs.
+/// * `paged_search()`: Initiates a paginated search.
+/// * `log_target()`: Enables/disables logging of the target URI.
+/// * `log_raw_response()`: Enables/disables logging of the raw response.
+///
+/// An instance of `Api` can be created using an API key and provides an easy way to interact with the API service.
 #[derive(Debug)]
 pub struct Api {
     key: String,
@@ -23,6 +34,8 @@ pub struct Api {
 impl Api {
 
     /// Executes a search on the API for works based on the query.
+    /// These are the entities that represent a piece of research, .e.g research articles, theses, etc. 
+    /// In total, it is a deduplicated and enriched version of records.
     /// 
     /// ```
     /// use core_api_rs::FilterOperator;
@@ -49,6 +62,8 @@ impl Api {
     }
     
     /// Executes a search on the API for works based on the query.
+    /// It gives you access to the collection of entities that offer data to CORE. 
+    /// It contains repositories (institutional and disciplinary), preprint servers, journals and publishers.
     /// 
     /// ```
     /// use core_api_rs::FilterOperator;
@@ -73,6 +88,21 @@ impl Api {
         self.execute_query(Query::SearchDataProviders(query))
     }
 
+    /// Executes a search on the API for journals based on the query.
+    /// This dataset contains all journal titles included in the CORE collection. 
+    /// Moreover, you can search and retrieve any journal even if it is not a CORE data provider.
+    /// 
+    /// ```
+    /// use core_api_rs::FilterOperator;
+    /// use core_api_rs::Api;
+    /// 
+    /// let api = Api::from("API_KEY");
+    /// 
+    /// let query = api.paged_search(10, 0)
+    ///     .and(FilterOperator::Eq("publisher", "OJS"));
+    /// let resp = api.search_outputs(query);
+    /// ```
+    /// 
     pub fn search_journals<T1, T2>(
         &self, 
         query: SearchQuery<T1, T2>
@@ -84,6 +114,22 @@ impl Api {
         self.execute_query(Query::SearchJournals(query))
     }
 
+
+    /// Executes a search on the API for otuputs (works) based on the query.
+    /// Outputs are a representation of a Work in a data provider. 
+    /// The data is not enriched and it mirrors exactly the content harvested from the data provider.
+    /// 
+    /// ```
+    /// use core_api_rs::FilterOperator;
+    /// use core_api_rs::Api;
+    /// 
+    /// let api = Api::from("API_KEY");
+    /// 
+    /// let query = api.paged_search(10, 0)
+    ///     .and(FilterOperator::Eq("publisher", "OJS"));
+    /// let resp = api.search_outputs(query);
+    /// ```
+    /// 
     pub fn search_outputs<T1, T2>(
         &self, 
         query: SearchQuery<T1, T2>
@@ -96,7 +142,17 @@ impl Api {
     }
     
 
-    
+    /// The `paged_search` method initiates a paginated search on the API.
+    /// It takes a limit and an offset as arguments, representing the number of results to return per page and the starting point for the results respectively.
+    /// This method returns a `SearchQuery` object that can be further manipulated to define the search criteria.
+    ///
+    /// Example:
+    /// ```
+    /// use core_api_rs::Api;
+    /// 
+    /// let api = Api::from("API_KEY");
+    /// let query = api.paged_search::<String, String>(10, 0); // Initiates a paginated search for 10 items starting from the first result
+    /// ```
     pub fn paged_search<T1 , T2>(
         &self, limit: i32, 
         offset: i32
@@ -129,6 +185,14 @@ impl Api {
         Self { key: self.key, client: self.client, log_target: self.log_target, log_raw_response }
     }
 
+
+    /// The `execute_query` method performs the actual API request based on the query provided.
+    /// It accepts a `Query` object that represents the search criteria and returns an `ApiResponse` object 
+    /// which contains the API response and the remaining rate limit.
+    /// 
+    /// This method is primarily used internally by other public methods and might not be directly called by the user.
+    ///
+    /// Note: This method is private and not exposed to the user directly.
     fn execute_query<T1, T2>(
         &self, 
         query: Query<T1, T2>
