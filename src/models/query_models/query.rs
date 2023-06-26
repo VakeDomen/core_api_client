@@ -59,13 +59,3 @@ where
         }
     }
 }
-
-/// `StringDefault` is a helper struct that implements the `Display` trait.
-/// It doesn't hold any data and it always prints an empty string.
-#[derive(Clone)]
-pub struct StringDefault {}
-impl Display for StringDefault {
-    fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        Ok(())
-    }
-}
