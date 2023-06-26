@@ -14,13 +14,13 @@ use super::query_models::{query::Query, request_type::QueryRequestType};
 /// The struct uses an API key and an HTTP client for requests, and optionally logs the request target and raw response.
 ///
 /// Key methods include:
-/// * `search_works()`: Executes a search for research works.
-/// * `search_data_providers()`: Executes a search for data providers.
-/// * `search_journals()`: Executes a search for journal titles.
-/// * `search_outputs()`: Executes a search for work outputs.
-/// * `paged_search()`: Initiates a paginated search.
-/// * `log_target()`: Enables/disables logging of the target URI.
-/// * `log_raw_response()`: Enables/disables logging of the raw response.
+/// * `search_works`: Executes a search for research works.
+/// * `search_data_providers`: Executes a search for data providers.
+/// * `search_journals`: Executes a search for journal titles.
+/// * `search_outputs`: Executes a search for work outputs.
+/// * `paged_search`: Initiates a paginated search. (SearchQuery builder)
+/// * `log_target`: Enables/disables logging of the target URI.
+/// * `log_raw_response`: Enables/disables logging of the raw response.
 ///
 /// An instance of `Api` can be created using an API key and provides an easy way to interact with the API service.
 #[derive(Debug)]
@@ -33,6 +33,45 @@ pub struct Api {
 
 
 impl Api {
+    /// Fetches a specific data provider from CORE using the provided data provider identifier.
+    ///
+    /// The function makes use of the CORE API's capability to fetch data provider details using their identifiers.
+    /// The identifiers can be either:
+    /// 1. CORE's data provider identifier.
+    /// 2. OpenDOAR's identifier, prefixed by "opendoar:" (e.g., "opendoar:123").
+    ///
+    /// A call to this function executes a query against the CORE API and returns the results wrapped in an `ApiResponse`.
+    ///
+    /// # Parameters
+    /// 
+    /// * `id`: Identifier of the data provider. Can be a CORE data provider identifier (integer) or an OpenDOAR identifier prefixed with "opendoar:".
+    /// 
+    /// # Returns
+    ///
+    /// * `Result<ApiResponse, crate::errors::Error>`: The function returns a `Result` type which can be:
+    ///     * `Ok(ApiResponse)`: An `ApiResponse` object representing the data provider details if the query was successful.
+    ///     * `Err(crate::errors::Error)`: An error of type `crate::errors::Error` if the query execution fails.
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use core_api_rs::FilterOperator;
+    /// use core_api_rs::Api;
+    /// 
+    /// let api = Api::from("API_KEY");
+    /// api.get_data_provider(86);
+    /// api.get_data_provider("opendoar:300");
+    /// 
+    /// ```
+    pub fn get_data_provider<T>(
+        &self,
+        id: T
+    ) -> Result<ApiResponse, crate::errors::Error>
+    where 
+        T: ToString + Clone
+    {
+        self.execute_query::<T, String>(Query::DataProviders(id))
+    }
 
     /// Executes a search on the API for works based on the query.
     /// These are the entities that represent a piece of research, .e.g research articles, theses, etc. 

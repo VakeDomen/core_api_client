@@ -28,7 +28,7 @@ where
     T1: ToString,
     T2: ToString,
 {
-    DataProviders(String),
+    DataProviders(T1),
     Discovery,
     ExpertFinder,
     Journals(String),
@@ -47,7 +47,7 @@ where
 {
     pub(crate) fn parse_request(self) -> (QueryRequestType, String) {
         match self {
-            Query::DataProviders(id) => (QueryRequestType::Get, format!("data-providers/{}", id)),
+            Query::DataProviders(id) => (QueryRequestType::Get, format!("data-providers/{}", id.to_string())),
             Query::Discovery => (QueryRequestType::Post, "discover".to_string()),
             Query::ExpertFinder => (QueryRequestType::Post, "labs/expert-finder".to_string()),
             Query::Journals(id) => (QueryRequestType::Get, format!("journals/{}", id)),
