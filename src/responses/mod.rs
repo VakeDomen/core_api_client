@@ -1,3 +1,3 @@
 pub mod search;
 pub mod response;
-pub mod responses;
+pub mod response_types;

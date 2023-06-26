@@ -138,7 +138,7 @@ where
             final_filter = format!("{}&stats={}", final_filter, s);
         }
 
-        if self.filters.len() < 1 {
+        if self.filters.is_empty() {
             return final_filter
         } else {
             final_filter = format!("{}&q=", final_filter);

@@ -1,7 +1,7 @@
 use reqwest::{blocking::Client, header};
 use crate::{
     helpers::response_handler::{parse_raw_response, parse_json}, 
-    responses::{response::ApiResponse, responses::ApiResponseType}, 
+    responses::{response::ApiResponse, response_types::ApiResponseType}, 
     SearchQuery,
 };
 
@@ -186,12 +186,20 @@ impl Api {
     /// It takes a limit and an offset as arguments, representing the number of results to return per page and the starting point for the results respectively.
     /// This method returns a `SearchQuery` object that can be further manipulated to define the search criteria.
     ///
+    /// Due to generic implementation the search requres 2 types. In case you do not use any filters the types can not 
+    /// be infered and therefore requre you to use any generic type that implements ToString.
+    /// 
     /// Example:
     /// ```
     /// use core_api_rs::Api;
+    /// use core_api_rs::FilterOperator;
     /// 
     /// let api = Api::from("API_KEY");
-    /// let query = api.paged_search::<String, String>(10, 0); // Initiates a paginated search for 10 items starting from the first result
+    /// let query1 = api.paged_search::<String, String>(10, 0); // Initiates a paginated search for 10 items starting from the first result
+    /// let query2 = api.paged_search::<_, String>(10, 0)
+    ///     .and(FilterOperator::Exists("software"));
+    /// let query3 = api.paged_search(10, 0)
+    ///     .and(FilterOperator::HasValue("type", "JOURNAL"));
     /// ```
     pub fn paged_search<T1 , T2>(
         &self, limit: i32, 
@@ -256,7 +264,7 @@ impl Api {
             .header(header::AUTHORIZATION, format!("Bearer {}", self.key.clone()))
             .send() {
                 Ok(r) => r,
-                Err(e) => return Err(crate::errors::Error::RequestError(e)),
+                Err(e) => return Err(crate::errors::Error::Request(e)),
             };
         let (data, rate_limit) = parse_raw_response(response)?;
         if self.log_raw_response {
