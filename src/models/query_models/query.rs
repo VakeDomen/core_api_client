@@ -9,11 +9,11 @@ use super::{search_query::SearchQuery, request_type::QueryRequestType};
 /// performing search operations across different types of works, outputs, journals and data providers.
 /// 
 /// # Variants
-/// * `DataProviders(String)`: Represents a request to the data-providers endpoint with a given identifier.
+/// * `DataProviders(T1)`: Represents a request to the data-providers endpoint with a given identifier.
 /// * `Discovery`: Represents a discovery request.
 /// * `ExpertFinder`: Represents an expert finder request.
-/// * `Journals(String)`: Represents a request to the journals endpoint with a given identifier.
-/// * `Outputs(String)`: Represents a request to the outputs endpoint with a given identifier.
+/// * `Journals(T1)`: Represents a request to the journals endpoint with a given identifier.
+/// * `Outputs(T1)`: Represents a request to the outputs endpoint with a given identifier.
 /// * `SearchWorks(SearchQuery<T1, T2>)`: Represents a search request for works.
 /// * `SearchOutputs(SearchQuery<T1, T2>)`: Represents a search request for outputs.
 /// * `SearchDataProviders(SearchQuery<T1, T2>)`: Represents a search request for data providers.
@@ -31,8 +31,8 @@ where
     DataProviders(T1),
     Discovery,
     ExpertFinder,
-    Journals(String),
-    Outputs(String),
+    Journals(T1),
+    Outputs(T1),
     SearchWorks(SearchQuery<T1, T2>),
     SearchOutputs(SearchQuery<T1, T2>),
     SearchDataProviders(SearchQuery<T1, T2>),
@@ -50,8 +50,8 @@ where
             Query::DataProviders(id) => (QueryRequestType::Get, format!("data-providers/{}", id.to_string())),
             Query::Discovery => (QueryRequestType::Post, "discover".to_string()),
             Query::ExpertFinder => (QueryRequestType::Post, "labs/expert-finder".to_string()),
-            Query::Journals(id) => (QueryRequestType::Get, format!("journals/{}", id)),
-            Query::Outputs(id) => (QueryRequestType::Get, format!("outputs/{}", id)),
+            Query::Journals(id) => (QueryRequestType::Get, format!("journals/{}", id.to_string())),
+            Query::Outputs(id) => (QueryRequestType::Get, format!("outputs/{}", id.to_string())),
             Query::SearchWorks(sq) => (QueryRequestType::Get, format!("search/works/{}", sq.parse())),
             Query::SearchOutputs(sq) => (QueryRequestType::Get, format!("search/outputs/{}", sq.parse())),
             Query::SearchDataProviders(sq) => (QueryRequestType::Get, format!("search/data-providers/{}", sq.parse())),
