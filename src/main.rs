@@ -22,7 +22,7 @@ fn main() {
     let mut tommorow = dates.next();
     let api = Api::from("DCrZJjaUtFd1KHg3zqbRTYelO9Xs26IM")
         .log_target(true)
-        .log_raw_response(true);
+        .log_raw_response(false);
 
     // for _ in 0..10 {
     //     let setup_query = api.paged_search(20, 1)
@@ -52,13 +52,11 @@ fn main() {
     // let query = api.paged_search(200, 0)
     //     .and(FilterOperator::Eq("publisher", "OJS"));
 
-    let resp = api.get_data_provider(86);
-    println!("{:#?}", resp);
-    let resp = api.get_data_provider("opendoar:300");
-    println!("{:#?}", resp);
+    let resp = api.get_output(1);
+
     // println!("{}", query.parse());
     // let resp = api.search_outputs(query);
-    // // println!("{:#?}", resp);
+    println!("{:#?}", resp);
     // if let Err(e) = resp {
     //     println!("{:#?}", e);
     // } else {

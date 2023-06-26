@@ -33,6 +33,31 @@ pub struct Api {
 
 
 impl Api {
+    /// Fetches a single output from CORE using the provided output id.
+    ///
+    /// # Parameters
+    ///
+    /// * `id` - The CORE ID of the output to be fetched.
+    /// 
+    /// # Examples
+    ///
+    /// ```rust
+    /// use core_api_rs::FilterOperator;
+    /// use core_api_rs::Api;
+    /// 
+    /// let api = Api::from("API_KEY");
+    /// api.get_output(0);
+    /// ```
+    pub fn get_output<T>(
+        &self,
+        id: T
+    ) -> Result<ApiResponse, crate::errors::Error>
+    where 
+        T: ToString + Clone
+    {
+        self.execute_query::<T, String>(Query::Outputs(id))
+    }
+
     /// Fetches a specific data provider from CORE using the provided data provider identifier.
     ///
     /// The function makes use of the CORE API's capability to fetch data provider details using their identifiers.
@@ -46,12 +71,6 @@ impl Api {
     /// 
     /// * `id`: Identifier of the data provider. Can be a CORE data provider identifier (integer) or an OpenDOAR identifier prefixed with "opendoar:".
     /// 
-    /// # Returns
-    ///
-    /// * `Result<ApiResponse, crate::errors::Error>`: The function returns a `Result` type which can be:
-    ///     * `Ok(ApiResponse)`: An `ApiResponse` object representing the data provider details if the query was successful.
-    ///     * `Err(crate::errors::Error)`: An error of type `crate::errors::Error` if the query execution fails.
-    ///
     /// # Examples
     ///
     /// ```rust
