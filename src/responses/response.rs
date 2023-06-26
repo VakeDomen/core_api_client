@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize, de::DeserializeOwned};
 
-use super::responses::ApiResponseType;
+use super::response_types::ApiResponseType;
 
 pub trait ApiResponseTrait: DeserializeOwned {}
 

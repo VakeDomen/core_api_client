@@ -20,23 +20,23 @@ pub(crate) fn parse_raw_response(
     // Get the response text
     match resp.text() {
         Ok(t) => Ok((t, rate_limit)),
-        Err(e) => Err(crate::errors::Error::RequestError(e)),
+        Err(e) => Err(crate::errors::Error::Request(e)),
     }
 }
 
 pub(crate) fn parse_json<T>(data: &str) -> Result<T, crate::errors::Error> where T: DeserializeOwned {
-    let deserializer = &mut Deserializer::from_str(&data);
+    let deserializer = &mut Deserializer::from_str(data);
     let res: Result<T, _> = deserialize(deserializer);
     match res {
         Ok(parsed_data) => Ok(parsed_data),
-        Err(e) => return Err(Error::ParsingError(e.to_string())),
+        Err(e) => Err(Error::Parsing(e.to_string())),
     }
 }
 
 fn extract_error(resp: Response) -> crate::errors::Error {
     match resp.text() {
-        Ok(t) => crate::errors::Error::ParsingError(t),
-        Err(e) => crate::errors::Error::RequestError(e),
+        Ok(t) => crate::errors::Error::Parsing(t),
+        Err(e) => crate::errors::Error::Request(e),
     }
 }
 
