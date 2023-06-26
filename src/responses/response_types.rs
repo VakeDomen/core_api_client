@@ -9,7 +9,7 @@ pub enum ApiResponseType {
     DataProviders(Option<DataProvider>),
     Discovery(DiscoveryResponse),
     ExpertFinder(ExpertFinderResponse),
-    Journals(JournalsResponse),
+    Journals(Journal),
     Outputs(Work),
     SearchWorks(SearchResponse<Work>),
     SearchOutputs(SearchResponse<Work>),
@@ -24,14 +24,4 @@ impl ApiResponseTrait for DiscoveryResponse {}
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ExpertFinderResponse;
 impl ApiResponseTrait for ExpertFinderResponse {}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct JournalsResponse;
-impl ApiResponseTrait for JournalsResponse {}
-
-// #[derive(Debug, Serialize, Deserialize)]
-// pub struct OutputsResponse;
-// impl ApiResponseTrait for OutputsResponse {}
-
-
 
