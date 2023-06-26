@@ -52,7 +52,7 @@ fn main() {
     // let query = api.paged_search(200, 0)
     //     .and(FilterOperator::Eq("publisher", "OJS"));
 
-    let resp = api.get_output(1);
+    let resp = api.get_journal("issn:1179-1497");
 
     // println!("{}", query.parse());
     // let resp = api.search_outputs(query);

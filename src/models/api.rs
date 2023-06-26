@@ -37,6 +37,31 @@ impl Api {
     ///
     /// # Parameters
     ///
+    /// * `id` - The Journal id in CORE. Use issn:ISSN to search by ISSN instead of the CORE identifier.
+    /// 
+    /// # Examples
+    ///
+    /// ```rust
+    /// use core_api_rs::FilterOperator;
+    /// use core_api_rs::Api;
+    /// 
+    /// let api = Api::from("API_KEY");
+    /// api.get_journal("issn:1179-1497");
+    /// ```
+    pub fn get_journal<T>(
+        &self,
+        id: T
+    ) -> Result<ApiResponse, crate::errors::Error>
+    where 
+        T: ToString + Clone
+    {
+        self.execute_query::<T, String>(Query::Journals(id))
+    }
+
+    /// Fetches a single output from CORE using the provided output id.
+    ///
+    /// # Parameters
+    ///
     /// * `id` - The CORE ID of the output to be fetched.
     /// 
     /// # Examples
