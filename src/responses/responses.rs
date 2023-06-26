@@ -6,7 +6,7 @@ use super::{search::SearchResponse, response::ApiResponseTrait};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum ApiResponseType {
-    DataProviders(DataProvidersResponse),
+    DataProviders(Option<DataProvider>),
     Discovery(DiscoveryResponse),
     ExpertFinder(ExpertFinderResponse),
     Journals(JournalsResponse),
@@ -16,11 +16,6 @@ pub enum ApiResponseType {
     SearchDataProviders(SearchResponse<DataProvider>),
     SearchJournals(SearchResponse<Journal>),
 }
-
-// Assume all of these types implement DeserializeOwned
-#[derive(Debug, Serialize, Deserialize)]
-pub struct DataProvidersResponse;
-impl ApiResponseTrait for DataProvidersResponse {}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DiscoveryResponse;
@@ -39,8 +34,4 @@ pub struct OutputsResponse;
 impl ApiResponseTrait for OutputsResponse {}
 
 
-// TODO: impelement full: ˘˘˘
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Outputs;
 
