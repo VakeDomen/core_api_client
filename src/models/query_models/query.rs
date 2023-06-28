@@ -1,7 +1,3 @@
-use std::fmt::Display;
-
-use serde_json::Value;
-
 use super::{search_query::SearchQuery, request_type::QueryRequestType};
 
 /// The `Query` enum represents various types of API requests that can be executed using the client. 
