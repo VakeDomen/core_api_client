@@ -212,7 +212,7 @@ impl Api {
     /// 
     /// let query = api.paged_search(10, 0)
     ///     .and(FilterOperator::Eq("publisher", "OJS"));
-    /// let resp = api.search_outputs(query);
+    /// let resp = api.search_journals(query);
     /// ```
     /// 
     pub fn search_journals<T1, T2>(
