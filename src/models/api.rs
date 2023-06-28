@@ -14,6 +14,9 @@ use super::query_models::{query::Query, request_type::QueryRequestType};
 /// The struct uses an API key and an HTTP client for requests, and optionally logs the request target and raw response.
 ///
 /// Key methods include:
+/// * `get_output`: Get a single Output based on CORE id.
+/// * `get_journal`: Get a single journal based on its identifier in CORE
+/// * `discover`: Allows you to find links to full texts based on a DOI. The system will search through the CORE data and other external sources to provide you the best match.
 /// * `search_works`: Executes a search for research works.
 /// * `search_data_providers`: Executes a search for data providers.
 /// * `search_journals`: Executes a search for journal titles.
@@ -281,7 +284,7 @@ impl Api {
         SearchQuery::paged(limit, offset)
     }
 
-    /// Method allows the user to override the default (flase) logging of the target URI that is being fetched
+    /// Method allows the user to override the default (false) logging of the target URI that is being fetched
     /// for data retrieval from the api
     /// ```
     /// use core_api_rs::Api;
@@ -292,7 +295,7 @@ impl Api {
     }
 
 
-    /// Method allows the user to override the default (flase) logging of the raw responses that are returned
+    /// Method allows the user to override the default (false) logging of the raw responses that are returned
     /// from the API. 
     /// ```
     /// use core_api_rs::Api;
@@ -357,7 +360,6 @@ impl Api {
         let deserialized_response = match retained_query {
             Query::DataProviders(_)         => ApiResponseType::DataProviders(parse_json(&data)?),
             Query::Discovery(_)             => ApiResponseType::Discovery(parse_json(&data)?),
-            Query::ExpertFinder             => ApiResponseType::ExpertFinder(parse_json(&data)?),
             Query::Journals(_)              => ApiResponseType::Journals(parse_json(&data)?),
             Query::Outputs(_)               => ApiResponseType::Outputs(parse_json(&data)?),
             Query::SearchWorks(_)           => ApiResponseType::SearchWorks(parse_json(&data)?),
