@@ -32,7 +32,6 @@ where
 {
     DataProviders(T1),
     Discovery(T1),
-    ExpertFinder,
     Journals(T1),
     Outputs(T1),
     SearchWorks(SearchQuery<T1, T2>),
@@ -51,7 +50,6 @@ where
         match self {
             Query::DataProviders(id) => (QueryRequestType::Get, format!("data-providers/{}", id.to_string()), None),
             Query::Discovery(doi) => (QueryRequestType::Post, "discover".to_string(), Some(create_discovery_body(doi))),
-            Query::ExpertFinder => (QueryRequestType::Post, "labs/expert-finder".to_string(), None),
             Query::Journals(id) => (QueryRequestType::Get, format!("journals/{}", id.to_string()), None),
             Query::Outputs(id) => (QueryRequestType::Get, format!("outputs/{}", id.to_string()), None),
             Query::SearchWorks(sq) => (QueryRequestType::Get, format!("search/works/{}", sq.parse()), None),
