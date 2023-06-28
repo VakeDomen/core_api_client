@@ -46,7 +46,7 @@ impl Api {
     /// # Examples
     /// 
     /// ```
-    /// use core_api_rs::Api;
+    /// use core_api_client::Api;
     /// 
     /// let api = Api::from("API_KEY");
     /// api.discover("10.1016/0370-2693(96)00910-0");
@@ -71,7 +71,7 @@ impl Api {
     /// # Examples
     ///
     /// ```rust
-    /// use core_api_rs::Api;
+    /// use core_api_client::Api;
     /// 
     /// let api = Api::from("API_KEY");
     /// api.get_journal("issn:1179-1497");
@@ -95,8 +95,8 @@ impl Api {
     /// # Examples
     ///
     /// ```rust
-    /// use core_api_rs::FilterOperator;
-    /// use core_api_rs::Api;
+    /// use core_api_client::FilterOperator;
+    /// use core_api_client::Api;
     /// 
     /// let api = Api::from("API_KEY");
     /// api.get_output(0);
@@ -127,8 +127,8 @@ impl Api {
     /// # Examples
     ///
     /// ```rust
-    /// use core_api_rs::FilterOperator;
-    /// use core_api_rs::Api;
+    /// use core_api_client::FilterOperator;
+    /// use core_api_client::Api;
     /// 
     /// let api = Api::from("API_KEY");
     /// api.get_data_provider(86);
@@ -150,8 +150,8 @@ impl Api {
     /// In total, it is a deduplicated and enriched version of records.
     /// 
     /// ```
-    /// use core_api_rs::FilterOperator;
-    /// use core_api_rs::Api;
+    /// use core_api_client::FilterOperator;
+    /// use core_api_client::Api;
     /// 
     /// let api = Api::from("API_KEY");
     /// 
@@ -178,8 +178,8 @@ impl Api {
     /// It contains repositories (institutional and disciplinary), preprint servers, journals and publishers.
     /// 
     /// ```
-    /// use core_api_rs::FilterOperator;
-    /// use core_api_rs::Api;
+    /// use core_api_client::FilterOperator;
+    /// use core_api_client::Api;
     /// 
     /// let api = Api::from("API_KEY");
     /// 
@@ -205,8 +205,8 @@ impl Api {
     /// Moreover, you can search and retrieve any journal even if it is not a CORE data provider.
     /// 
     /// ```
-    /// use core_api_rs::FilterOperator;
-    /// use core_api_rs::Api;
+    /// use core_api_client::FilterOperator;
+    /// use core_api_client::Api;
     /// 
     /// let api = Api::from("API_KEY");
     /// 
@@ -232,8 +232,8 @@ impl Api {
     /// The data is not enriched and it mirrors exactly the content harvested from the data provider.
     /// 
     /// ```
-    /// use core_api_rs::FilterOperator;
-    /// use core_api_rs::Api;
+    /// use core_api_client::FilterOperator;
+    /// use core_api_client::Api;
     /// 
     /// let api = Api::from("API_KEY");
     /// 
@@ -263,8 +263,8 @@ impl Api {
     /// 
     /// Example:
     /// ```
-    /// use core_api_rs::Api;
-    /// use core_api_rs::FilterOperator;
+    /// use core_api_client::Api;
+    /// use core_api_client::FilterOperator;
     /// 
     /// let api = Api::from("API_KEY");
     /// let query1 = api.paged_search::<String, String>(10, 0); // Initiates a paginated search for 10 items starting from the first result
@@ -287,7 +287,7 @@ impl Api {
     /// Method allows the user to override the default (false) logging of the target URI that is being fetched
     /// for data retrieval from the api
     /// ```
-    /// use core_api_rs::Api;
+    /// use core_api_client::Api;
     /// let api = Api::from("API_KEY").log_target(true);
     /// ```
     pub fn log_target(self, log_target: bool) -> Self {
@@ -298,7 +298,7 @@ impl Api {
     /// Method allows the user to override the default (false) logging of the raw responses that are returned
     /// from the API. 
     /// ```
-    /// use core_api_rs::Api;
+    /// use core_api_client::Api;
     /// let api = Api::from("API_KEY").log_raw_response(true);
     /// ```
     pub fn log_raw_response(self, log_raw_response: bool) -> Self {

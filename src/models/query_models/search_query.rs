@@ -14,8 +14,8 @@ use super::{logical_operator::LogicalOperator, filter::Filter};
 ///
 /// # Example
 /// ```
-/// use core_api_rs::FilterOperator;
-/// use core_api_rs::Api;
+/// use core_api_client::FilterOperator;
+/// use core_api_client::Api;
 /// 
 /// let api = Api::from("API_KEY");
 /// 
@@ -64,7 +64,7 @@ where
     /// # Example
     ///
     /// ```
-    /// use core_api_rs::{Api, SearchQuery, FilterOperator};
+    /// use core_api_client::{Api, SearchQuery, FilterOperator};
     /// 
     /// let api = Api::from("API_KEY");
     /// let query = api.paged_search(10, 0)
@@ -88,7 +88,7 @@ where
     /// # Example
     ///
     /// ```
-    /// use core_api_rs::{Api, SearchQuery, FilterOperator};
+    /// use core_api_client::{Api, SearchQuery, FilterOperator};
     /// 
     /// let api = Api::from("API_KEY");
     /// let query = api.paged_search(10, 0)
@@ -115,7 +115,7 @@ where
     /// # Example
     ///
     /// ```
-    /// use core_api_rs::{Api, SearchQuery, FilterOperator};
+    /// use core_api_client::{Api, SearchQuery, FilterOperator};
     /// 
     /// let api = Api::from("API_KEY");
     /// let query = api.paged_search(10, 0)

@@ -1,4 +1,4 @@
-# core_api_rs - CORE API Rust Client
+# core_api_client - CORE API Rust Client
 
 A Rust library for interacting with [CORE](https://core.ac.uk/services/api/), a service that provides access to metadata and full texts of research papers from thousands of data providers.
 
@@ -43,8 +43,8 @@ These are the entities that represent a piece of research, .e.g research article
 In total, it is a deduplicated and enriched version of records.
 
 ```rust
-use core_api_rs::FilterOperator;
-use core_api_rs::Api;
+use core_api_client::FilterOperator;
+use core_api_client::Api;
 
 let api = Api::from("API_KEY");
 
@@ -65,8 +65,8 @@ It gives you access to the collection of entities that offer data to CORE.
 It contains repositories (institutional and disciplinary), preprint servers, journals and publishers.
 
 ```rust
-use core_api_rs::FilterOperator;
-use core_api_rs::Api;
+use core_api_client::FilterOperator;
+use core_api_client::Api;
 
 let api = Api::from("API_KEY");
 
@@ -90,8 +90,8 @@ A call to this function executes a query against the CORE API and returns the re
 * `id`: Identifier of the data provider. Can be a CORE data provider identifier (integer) or an OpenDOAR identifier prefixed with "opendoar:".
 
 ```rust
-use core_api_rs::FilterOperator;
-use core_api_rs::Api;
+use core_api_client::FilterOperator;
+use core_api_client::Api;
 
 let api = Api::from("API_KEY");
 
@@ -111,8 +111,8 @@ This dataset contains all journal titles included in the CORE collection.
 Moreover, you can search and retrieve any journal even if it is not a CORE data provider.
 
 ```rust
-use core_api_rs::FilterOperator;
-use core_api_rs::Api;
+use core_api_client::FilterOperator;
+use core_api_client::Api;
 
 let api = Api::from("API_KEY");
 
@@ -129,7 +129,7 @@ Fetches a single output from CORE using the provided output id.
 * `id` - The Journal id in CORE. Use issn:ISSN to search by ISSN instead of the CORE identifier.
 
 ```rust
-use core_api_rs::Api;
+use core_api_client::Api;
 
 let api = Api::from("API_KEY");
 
@@ -145,8 +145,8 @@ Outputs are a representation of a Work in a data provider.
 The data is not enriched and it mirrors exactly the content harvested from the data provider.
 
 ```rust
-use core_api_rs::FilterOperator;
-use core_api_rs::Api;
+use core_api_client::FilterOperator;
+use core_api_client::Api;
 
 let api = Api::from("API_KEY");
 
@@ -162,7 +162,7 @@ Fetches a single output from CORE using the provided output id.
 * `id` - The CORE ID of the output to be fetched.
 
 ```rust
-use core_api_rs::Api;
+use core_api_client::Api;
 
 let api = Api::from("API_KEY");
 
@@ -179,7 +179,7 @@ We would love for you to contribute to `core_api_client` and help make it even b
 
 ### Issues and Bugs
 
-If you find a bug in the source code or a mistake in the documentation, you can help us by submitting an issue to the [core_api_client GitHub Repository](https://github.com/VakeDomen/core_api_rs). Even better, you can submit a Pull Request with a fix.
+If you find a bug in the source code or a mistake in the documentation, you can help us by submitting an issue to the [core_api_client GitHub Repository](https://github.com/VakeDomen/core_api_client). Even better, you can submit a Pull Request with a fix.
 
 ### Feature Requests
 
