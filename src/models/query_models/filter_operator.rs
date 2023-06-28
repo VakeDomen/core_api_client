@@ -17,7 +17,7 @@
 /// * `HasValue`: Checks if the value of a key equals the provided value.
 ///
 /// ```rust
-/// use core_api_rs::FilterOperator;
+/// use core_api_client::FilterOperator;
 /// 
 /// let filter = FilterOperator::Eq("age", 30);
 /// ```
