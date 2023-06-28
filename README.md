@@ -175,7 +175,7 @@ match api.get_output(0) {
 
 ## Contributing
 
-We would love for you to contribute to `core_api_rust_client` and help make it even better than it is today! As a contributor, here are the guidelines we would like you to follow:
+We would love for you to contribute to `core_api_client` and help make it even better than it is today! As a contributor, here are the guidelines we would like you to follow:
 
 ### Issues and Bugs
 
