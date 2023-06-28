@@ -79,47 +79,7 @@ match api.search_data_providers(query) {
     Err(e) => println!("{:#?}", e),
 };
 ```
-### Journals
-Executes a search on the API for journals based on the query.
-This dataset contains all journal titles included in the CORE collection. 
-Moreover, you can search and retrieve any journal even if it is not a CORE data provider.
 
-```rust
-use core_api_rs::FilterOperator;
-use core_api_rs::Api;
-
-let api = Api::from("API_KEY");
-
-let query = api.paged_search(10, 0)
-    .and(FilterOperator::Eq("publisher", "OJS"));
-
-match api.search_journals(query) {
-    Ok(data) => println!("{:#?}", data),
-    Err(e) => println!("{:#?}", e),
-};
-```
-
-### Outputs
-Executes a search on the API for otuputs (works) based on the query.
-Outputs are a representation of a Work in a data provider. 
-The data is not enriched and it mirrors exactly the content harvested from the data provider.
-
-```rust
-use core_api_rs::FilterOperator;
-use core_api_rs::Api;
-
-let api = Api::from("API_KEY");
-
-let query = api.paged_search(10, 0)
-    .and(FilterOperator::Eq("publisher", "OJS"));
-
-match api.search_outputs(query) {
-    Ok(data) => println!("{:#?}", data),
-    Err(e) => println!("{:#?}", e),
-};
-```
-
-### Data provider
 Fetches a specific data provider from CORE using the provided data provider identifier.
 The function makes use of the CORE API's capability to fetch data provider details using their identifiers.
 The identifiers can be either:
@@ -145,6 +105,73 @@ match api.get_data_provider("opendoar:300") {
     Err(e) => println!("{:#?}", e),
 };
 ```
+### Journals
+Executes a search on the API for journals based on the query.
+This dataset contains all journal titles included in the CORE collection. 
+Moreover, you can search and retrieve any journal even if it is not a CORE data provider.
+
+```rust
+use core_api_rs::FilterOperator;
+use core_api_rs::Api;
+
+let api = Api::from("API_KEY");
+
+let query = api.paged_search(10, 0)
+    .and(FilterOperator::Eq("publisher", "OJS"));
+
+match api.search_journals(query) {
+    Ok(data) => println!("{:#?}", data),
+    Err(e) => println!("{:#?}", e),
+};
+```
+Fetches a single output from CORE using the provided output id.
+
+* `id` - The Journal id in CORE. Use issn:ISSN to search by ISSN instead of the CORE identifier.
+
+```rust
+use core_api_rs::Api;
+
+let api = Api::from("API_KEY");
+
+match api.get_journal("issn:1179-1497") {
+    Ok(data) => println!("{:#?}", data),
+    Err(e) => println!("{:#?}", e),
+};
+```
+
+### Outputs
+Executes a search on the API for otuputs (works) based on the query.
+Outputs are a representation of a Work in a data provider. 
+The data is not enriched and it mirrors exactly the content harvested from the data provider.
+
+```rust
+use core_api_rs::FilterOperator;
+use core_api_rs::Api;
+
+let api = Api::from("API_KEY");
+
+let query = api.paged_search(10, 0)
+    .and(FilterOperator::Eq("publisher", "OJS"));
+
+match api.search_outputs(query) {
+    Ok(data) => println!("{:#?}", data),
+    Err(e) => println!("{:#?}", e),
+};
+```
+Fetches a single output from CORE using the provided output id.
+* `id` - The CORE ID of the output to be fetched.
+
+```rust
+use core_api_rs::Api;
+
+let api = Api::from("API_KEY");
+
+match api.get_output(0) {
+    Ok(data) => println!("{:#?}", data),
+    Err(e) => println!("{:#?}", e),
+};
+```
+
 
 ## Contributing
 
