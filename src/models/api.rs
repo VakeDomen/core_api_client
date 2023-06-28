@@ -33,6 +33,32 @@ pub struct Api {
 
 
 impl Api {
+    /// allows you to find links to full texts based on a DOI. The system will search through the CORE 
+    /// data and other external sources to provide you the best match.
+    /// 
+    /// # Parameters
+    /// 
+    /// * 'doi' - Doi of the target discover resource 
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// use core_api_rs::Api;
+    /// 
+    /// let api = Api::from("API_KEY");
+    /// api.discover("10.1016/0370-2693(96)00910-0");
+    /// ```
+    pub fn discover<T>(
+        &self,
+        doi: T
+    ) -> Result<ApiResponse, crate::errors::Error> 
+    where
+        T: ToString + Clone
+    {
+        self.execute_query::<T, String>(Query::Discovery(doi))
+    }
+
+
     /// Fetches a single output from CORE using the provided output id.
     ///
     /// # Parameters
@@ -42,7 +68,6 @@ impl Api {
     /// # Examples
     ///
     /// ```rust
-    /// use core_api_rs::FilterOperator;
     /// use core_api_rs::Api;
     /// 
     /// let api = Api::from("API_KEY");
@@ -293,37 +318,52 @@ impl Api {
         T1: ToString + Clone,
         T2: ToString + Clone,
     {
-        let query_retained = query.clone();
-        let (req_type, query_uri) = query.parse_request();
+        let retained_query = query.clone(); // for later refernce
+        let (req_type, query_uri, body) = query.parse_request();
+        
+        let target = format!("https://api.core.ac.uk/v3/{}", query_uri);
         if self.log_target {
             println!("{}", query_uri);
         }
-        let uri = format!("https://api.core.ac.uk/v3/{}", query_uri);
-
+        
         let client_builer = match req_type {
-            QueryRequestType::Get => self.client.get(uri),
-            QueryRequestType::Post => self.client.post(uri),
+            QueryRequestType::Get   => self.client.get(target),
+            QueryRequestType::Post  => self.client.post(target),
         };
-        let response = match client_builer
-            .header(header::AUTHORIZATION, format!("Bearer {}", self.key.clone()))
-            .send() {
-                Ok(r) => r,
-                Err(e) => return Err(crate::errors::Error::Request(e)),
-            };
+
+        let client_builer = client_builer.header(
+            header::AUTHORIZATION,
+            format!("Bearer {}", self.key.clone())
+        );
+
+        let client_builder = match (req_type, body) {
+            (QueryRequestType::Get,     None)                   => client_builer,
+            (QueryRequestType::Get,     Some(_))                => client_builer,
+            (QueryRequestType::Post,    None)                   => client_builer,
+            (QueryRequestType::Post,    Some(content))  => client_builer.body(content),
+        };
+
+        let response = match client_builder.send() {
+            Ok(r) => r,
+            Err(e) => return Err(crate::errors::Error::Request(e)),
+        };
+        
         let (data, rate_limit) = parse_raw_response(response)?;
+        
         if self.log_raw_response {
             println!("{}", data);
         }
-        let deserialized_response = match query_retained {
-            Query::DataProviders(_) => ApiResponseType::DataProviders(parse_json(&data)?),
-            Query::Discovery => ApiResponseType::Discovery(parse_json(&data)?),
-            Query::ExpertFinder => ApiResponseType::ExpertFinder(parse_json(&data)?),
-            Query::Journals(_) => ApiResponseType::Journals(parse_json(&data)?),
-            Query::Outputs(_) => ApiResponseType::Outputs(parse_json(&data)?),
-            Query::SearchWorks(_) => ApiResponseType::SearchWorks(parse_json(&data)?),
-            Query::SearchOutputs(_) => ApiResponseType::SearchOutputs(parse_json(&data)?),
-            Query::SearchDataProviders(_) => ApiResponseType::SearchDataProviders(parse_json(&data)?),
-            Query::SearchJournals(_) => ApiResponseType::SearchJournals(parse_json(&data)?),
+        
+        let deserialized_response = match retained_query {
+            Query::DataProviders(_)         => ApiResponseType::DataProviders(parse_json(&data)?),
+            Query::Discovery(_)             => ApiResponseType::Discovery(parse_json(&data)?),
+            Query::ExpertFinder             => ApiResponseType::ExpertFinder(parse_json(&data)?),
+            Query::Journals(_)              => ApiResponseType::Journals(parse_json(&data)?),
+            Query::Outputs(_)               => ApiResponseType::Outputs(parse_json(&data)?),
+            Query::SearchWorks(_)           => ApiResponseType::SearchWorks(parse_json(&data)?),
+            Query::SearchOutputs(_)         => ApiResponseType::SearchOutputs(parse_json(&data)?),
+            Query::SearchDataProviders(_)   => ApiResponseType::SearchDataProviders(parse_json(&data)?),
+            Query::SearchJournals(_)        => ApiResponseType::SearchJournals(parse_json(&data)?),
         };
     
         Ok(ApiResponse {

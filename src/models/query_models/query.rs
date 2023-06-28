@@ -1,5 +1,7 @@
 use std::fmt::Display;
 
+use serde_json::Value;
+
 use super::{search_query::SearchQuery, request_type::QueryRequestType};
 
 /// The `Query` enum represents various types of API requests that can be executed using the client. 
@@ -29,7 +31,7 @@ where
     T2: ToString,
 {
     DataProviders(T1),
-    Discovery,
+    Discovery(T1),
     ExpertFinder,
     Journals(T1),
     Outputs(T1),
@@ -45,17 +47,21 @@ where
     T1: ToString,
     T2: ToString, 
 {
-    pub(crate) fn parse_request(self) -> (QueryRequestType, String) {
+    pub(crate) fn parse_request(self) -> (QueryRequestType, String, Option<String>) {
         match self {
-            Query::DataProviders(id) => (QueryRequestType::Get, format!("data-providers/{}", id.to_string())),
-            Query::Discovery => (QueryRequestType::Post, "discover".to_string()),
-            Query::ExpertFinder => (QueryRequestType::Post, "labs/expert-finder".to_string()),
-            Query::Journals(id) => (QueryRequestType::Get, format!("journals/{}", id.to_string())),
-            Query::Outputs(id) => (QueryRequestType::Get, format!("outputs/{}", id.to_string())),
-            Query::SearchWorks(sq) => (QueryRequestType::Get, format!("search/works/{}", sq.parse())),
-            Query::SearchOutputs(sq) => (QueryRequestType::Get, format!("search/outputs/{}", sq.parse())),
-            Query::SearchDataProviders(sq) => (QueryRequestType::Get, format!("search/data-providers/{}", sq.parse())),
-            Query::SearchJournals(sq) => (QueryRequestType::Get, format!("search/journals/{}", sq.parse())),
+            Query::DataProviders(id) => (QueryRequestType::Get, format!("data-providers/{}", id.to_string()), None),
+            Query::Discovery(doi) => (QueryRequestType::Post, "discover".to_string(), Some(create_discovery_body(doi))),
+            Query::ExpertFinder => (QueryRequestType::Post, "labs/expert-finder".to_string(), None),
+            Query::Journals(id) => (QueryRequestType::Get, format!("journals/{}", id.to_string()), None),
+            Query::Outputs(id) => (QueryRequestType::Get, format!("outputs/{}", id.to_string()), None),
+            Query::SearchWorks(sq) => (QueryRequestType::Get, format!("search/works/{}", sq.parse()), None),
+            Query::SearchOutputs(sq) => (QueryRequestType::Get, format!("search/outputs/{}", sq.parse()), None),
+            Query::SearchDataProviders(sq) => (QueryRequestType::Get, format!("search/data-providers/{}", sq.parse()), None),
+            Query::SearchJournals(sq) => (QueryRequestType::Get, format!("search/journals/{}", sq.parse()), None),
         }
     }
+}
+
+fn create_discovery_body<T>(doi: T) -> String where T: ToString {
+    format!("{{\"doi\": \"{}\"}}", doi.to_string())
 }
