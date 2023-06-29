@@ -1,4 +1,6 @@
 
+use serde::{Serialize, Deserialize};
+use std::fmt;
 use crate::FilterOperator;
 
 use super::{logical_operator::LogicalOperator, filter::Filter};
@@ -37,7 +39,7 @@ use super::{logical_operator::LogicalOperator, filter::Filter};
 /// * `and`: Adds a new filter condition with a logical AND operator.
 /// * `or`: Adds a new filter condition with a logical OR operator.
 /// * `parse`: Parses the `SearchQuery` object into a string to be used in the API request.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, PartialOrd, Hash, Default)]
 pub struct SearchQuery<T1 = String, T2 = String>
 where
     T1: ToString,
@@ -168,19 +170,24 @@ where
     }
 }
 
-impl<T1, T2> Default for SearchQuery<T1, T2>
+impl<T1, T2> fmt::Display for SearchQuery<T1, T2>
 where
     T1: ToString,
-    T2: ToString,  
+    T2: ToString,
 {
-    fn default() -> Self {
-        Self { 
-            filters: Default::default(), 
-            limit: None, 
-            offset: None, 
-            scroll: None, 
-            stats: None ,
-        }
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let filters = self.filters
+            .iter()
+            .map(|filter| filter.to_string()) // Assuming `Filter` also implements `ToString`
+            .collect::<Vec<_>>()
+            .join(", ");
+
+        let limit = self.limit.map_or(String::from("None"), |limit| limit.to_string());
+        let offset = self.offset.map_or(String::from("None"), |offset| offset.to_string());
+        let scroll = self.scroll.map_or(String::from("None"), |scroll| scroll.to_string());
+        let stats = self.stats.map_or(String::from("None"), |stats| stats.to_string());
+
+        write!(f, "SearchQuery {{ filters: [{}], limit: {}, offset: {}, scroll: {}, stats: {} }}",
+               filters, limit, offset, scroll, stats)
     }
 }
-

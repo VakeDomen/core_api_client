@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use super::{other_identifiers::OtherIdentifiers, location::Location};
 
 /// Represents a provider of open access scientific papers and other resources.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, PartialEq, PartialOrd, Hash, Default)]
 pub struct DataProvider {
     /// Unique ID of the data provider
     pub id: i32,

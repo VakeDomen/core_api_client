@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /// struct holds the avalible data on the [data providers](https://api.core.ac.uk/docs/v3#tag/Data-Providers)
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, PartialEq, PartialOrd, Hash, Default)]
 pub struct DataProvider {
     /// ID of the data provider.
     pub id: i32,

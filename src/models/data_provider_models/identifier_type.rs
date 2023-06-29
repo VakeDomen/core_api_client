@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use crate::helpers::string_number_deserializer::deserialize_as_string;
 
 /// Represents a type of identifier.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, PartialOrd, Hash, Default)]
 pub struct IdentifierType {
     /// Preferred form of the identifier
     #[serde(deserialize_with = "deserialize_as_string", default)]
