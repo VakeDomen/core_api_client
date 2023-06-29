@@ -1,3 +1,5 @@
+use serde::{Deserialize, Serialize};
+use std::fmt;
 
 /// `FilterOperator` enum defines the types of comparison operations
 /// that can be used in a `SearchQuery` filter.
@@ -25,7 +27,7 @@
 /// The string representation follows the convention of `key<operator>value` for most operators,
 /// `_exists_:key` for the `Exists` operator, and `key:value` for the `HasValue` operator.
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, PartialOrd, Hash)]
 pub enum FilterOperator<T1, T2>
 where
     T1: ToString,
@@ -55,6 +57,24 @@ where
             FilterOperator::BiggerEq(key, value) => format!("{}>={}", key.to_string(), value.to_string()),
             FilterOperator::Exists(key) => format!("_exists_:{}", key.to_string()),
             FilterOperator::HasValue(key, value) => format!("{}:{}", key.to_string(), value.to_string()),
+        }
+    }
+}
+
+impl<T1, T2> fmt::Display for FilterOperator<T1, T2>
+where
+    T1: ToString,
+    T2: ToString,
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FilterOperator::Smaller(t1, t2) => write!(f, "Smaller({}, {})", t1.to_string(), t2.to_string()),
+            FilterOperator::Bigger(t1, t2) => write!(f, "Bigger({}, {})", t1.to_string(), t2.to_string()),
+            FilterOperator::Eq(t1, t2) => write!(f, "Eq({}, {})", t1.to_string(), t2.to_string()),
+            FilterOperator::SmallerEq(t1, t2) => write!(f, "SmallerEq({}, {})", t1.to_string(), t2.to_string()),
+            FilterOperator::BiggerEq(t1, t2) => write!(f, "BiggerEq({}, {})", t1.to_string(), t2.to_string()),
+            FilterOperator::Exists(t1) => write!(f, "Exists({})", t1.to_string()),
+            FilterOperator::HasValue(t1, t2) => write!(f, "HasValue({}, {})", t1.to_string(), t2.to_string()),
         }
     }
 }

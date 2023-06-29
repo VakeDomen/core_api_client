@@ -1,3 +1,5 @@
+use std::fmt;
+
 use super::{search_query::SearchQuery, request_type::QueryRequestType};
 
 /// The `Query` enum represents various types of API requests that can be executed using the client. 
@@ -20,7 +22,7 @@ use super::{search_query::SearchQuery, request_type::QueryRequestType};
 /// # Methods
 /// `parse_request`: This method processes a `Query` variant and returns the corresponding API endpoint and HTTP method.
 ///
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Hash)]
 pub(crate) enum Query<T1, T2>
 where
     T1: ToString,
@@ -35,7 +37,6 @@ where
     SearchDataProviders(SearchQuery<T1, T2>),
     SearchJournals(SearchQuery<T1, T2>),
 }
-
 
 impl<T1, T2> Query<T1, T2>
 where
@@ -58,4 +59,23 @@ where
 
 fn create_discovery_body<T>(doi: T) -> String where T: ToString {
     format!("{{\"doi\": \"{}\"}}", doi.to_string())
+}
+
+impl<T1, T2> fmt::Display for Query<T1, T2>
+where
+    T1: ToString,
+    T2: ToString,
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Query::DataProviders(data) => write!(f, "DataProviders({})", data.to_string()),
+            Query::Discovery(data) => write!(f, "Discovery({})", data.to_string()),
+            Query::Journals(data) => write!(f, "Journals({})", data.to_string()),
+            Query::Outputs(data) => write!(f, "Outputs({})", data.to_string()),
+            Query::SearchWorks(query) => write!(f, "SearchWorks({})", query.to_string()), // assuming SearchQuery also implements ToString
+            Query::SearchOutputs(query) => write!(f, "SearchOutputs({})", query.to_string()),
+            Query::SearchDataProviders(query) => write!(f, "SearchDataProviders({})", query.to_string()),
+            Query::SearchJournals(query) => write!(f, "SearchJournals({})", query.to_string()),
+        }
+    }
 }

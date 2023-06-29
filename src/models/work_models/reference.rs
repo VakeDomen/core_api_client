@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Struct representing a reference.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, PartialEq, PartialOrd, Hash, Default)]
 pub struct Reference {
     /// ID of the reference.
     pub id: Option<i32>,

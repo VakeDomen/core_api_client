@@ -6,7 +6,7 @@ use super::{reference::Reference, journal::Journal, author::Author, data_provide
 
 
 /// Struct holds the work information. More info on the work struct [here](https://api.core.ac.uk/docs/v3#tag/Works/null) 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, PartialEq, PartialOrd, Hash, Default)]
 pub struct Work {
     /// Date the work was accepted
     #[serde(rename = "acceptedDate")]

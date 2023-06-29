@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Represents a Journal with various associated data.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, PartialEq, PartialOrd, Hash, Default)]
 pub struct Journal {
     /// The various identifiers of the Journal.
     pub identifiers: Vec<String>,

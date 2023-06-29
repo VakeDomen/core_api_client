@@ -3,17 +3,17 @@ use serde::de::{self, Deserialize, Deserializer, MapAccess, Visitor};
 use std::fmt;
 
 /// Links are wrapped in an enum since they can either be simple string links or a structured piece of data with a link type.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, PartialEq, PartialOrd, Hash)]
 pub enum LinkType {
     /// Represents a raw string link.
     Raw(String),
 
     /// Represents a structured link.
     Structured(Link)  
-} 
+}
 
 /// Struct representing a structured link.
-#[derive(Debug, Des, Serialize)]
+#[derive(Debug, Des, Serialize, PartialEq, PartialOrd, Hash, Default)]
 pub struct Link {
     /// Type of the link.
     #[serde(rename = "type")]
@@ -23,6 +23,11 @@ pub struct Link {
     url: String,
 }
 
+impl Default for LinkType {
+    fn default() -> Self {
+        LinkType::Raw("".to_string())
+    }
+} 
 
 impl<'de> Deserialize<'de> for LinkType {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
@@ -56,5 +61,20 @@ impl<'de> Deserialize<'de> for LinkType {
         }
 
         deserializer.deserialize_any(LinkTypeVisitor)
+    }
+}
+
+impl fmt::Display for LinkType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            LinkType::Raw(s) => write!(f, "Raw Link: {}", s),
+            LinkType::Structured(link) => write!(f, "Structured Link: {}", link),
+        }
+    }
+}
+
+impl fmt::Display for Link {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Link {{ type: {}, url: {} }}", self.link_type, self.url)
     }
 }
