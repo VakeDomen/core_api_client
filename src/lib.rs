@@ -6,7 +6,6 @@ mod responses;
 pub use models::api::Api;
 pub use models::query_models::search_query::SearchQuery;
 pub use models::query_models::filter_operator::FilterOperator;
-pub use responses::response_types::ApiResponseType;
 pub use models::work_models::*;
 
 #[cfg(test)]
@@ -48,6 +47,6 @@ mod tests {
 
     #[test]
     fn test_send_sync_api_response() {
-        assert_impl_all!(ApiResponse: Send, Sync);
+        assert_impl_all!(ApiResponse<Work>: Send, Sync);
     }
 }

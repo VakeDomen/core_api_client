@@ -1,11 +1,12 @@
 use reqwest::{blocking::Client, header};
+use serde::de::DeserializeOwned;
 use crate::{
     helpers::response_handler::{parse_raw_response, parse_json}, 
-    responses::{response::ApiResponse, response_types::ApiResponseType}, 
-    SearchQuery,
+    responses::{response::ApiResponse, search::SearchResponse}, 
+    SearchQuery, journal::Journal, work::Work, data_provider::DataProvider,
 };
 
-use super::query_models::{query::Query, request_type::QueryRequestType};
+use super::{query_models::{query::Query, request_type::QueryRequestType}, discovery_models::discovery::Discovery};
 
 /// Main API struct. API holds your key you acquire from [CORE](https://core.ac.uk/services/api#form). 
 /// Lastly it holds a refernce to a blocking Client it uses to execute queries to the CORE API.
@@ -54,11 +55,11 @@ impl Api {
     pub fn discover<T>(
         &self,
         doi: T
-    ) -> Result<ApiResponse, crate::errors::Error> 
+    ) -> Result<ApiResponse<Discovery>, crate::errors::Error> 
     where
         T: ToString + Clone
     {
-        self.execute_query::<T, String>(Query::Discovery(doi))
+        self.execute_query::<T, String, Discovery>(Query::Discovery(doi))
     }
 
 
@@ -79,11 +80,11 @@ impl Api {
     pub fn get_journal<T>(
         &self,
         id: T
-    ) -> Result<ApiResponse, crate::errors::Error>
+    ) -> Result<ApiResponse<Journal>, crate::errors::Error>
     where 
         T: ToString + Clone
     {
-        self.execute_query::<T, String>(Query::Journals(id))
+        self.execute_query::<T, String, Journal>(Query::Journals(id))
     }
 
     /// Fetches a single output from CORE using the provided output id.
@@ -104,11 +105,11 @@ impl Api {
     pub fn get_output<T>(
         &self,
         id: T
-    ) -> Result<ApiResponse, crate::errors::Error>
+    ) -> Result<ApiResponse<Work>, crate::errors::Error>
     where 
         T: ToString + Clone
     {
-        self.execute_query::<T, String>(Query::Outputs(id))
+        self.execute_query::<T, String, Work>(Query::Outputs(id))
     }
 
     /// Fetches a specific data provider from CORE using the provided data provider identifier.
@@ -138,11 +139,11 @@ impl Api {
     pub fn get_data_provider<T>(
         &self,
         id: T
-    ) -> Result<ApiResponse, crate::errors::Error>
+    ) -> Result<ApiResponse<DataProvider>, crate::errors::Error>
     where 
         T: ToString + Clone
     {
-        self.execute_query::<T, String>(Query::DataProviders(id))
+        self.execute_query::<T, String, DataProvider>(Query::DataProviders(id))
     }
 
     /// Executes a search on the API for works based on the query.
@@ -165,7 +166,7 @@ impl Api {
     pub fn search_works<T1, T2>(
         &self, 
         query: SearchQuery<T1, T2>
-    ) -> Result<ApiResponse, crate::errors::Error> 
+    ) -> Result<ApiResponse<SearchResponse<Work>>, crate::errors::Error> 
     where 
         T1: ToString + Clone,
         T2: ToString + Clone,
@@ -192,7 +193,7 @@ impl Api {
     pub fn search_data_providers<T1, T2>(
         &self, 
         query: SearchQuery<T1, T2>
-    ) -> Result<ApiResponse, crate::errors::Error> 
+    ) -> Result<ApiResponse<SearchResponse<DataProvider>>, crate::errors::Error> 
     where 
         T1: ToString + Clone,
         T2: ToString + Clone,
@@ -218,7 +219,7 @@ impl Api {
     pub fn search_journals<T1, T2>(
         &self, 
         query: SearchQuery<T1, T2>
-    ) -> Result<ApiResponse, crate::errors::Error> 
+    ) -> Result<ApiResponse<SearchResponse<Journal>>, crate::errors::Error> 
     where 
         T1: ToString + Clone,
         T2: ToString + Clone,
@@ -245,7 +246,7 @@ impl Api {
     pub fn search_outputs<T1, T2>(
         &self, 
         query: SearchQuery<T1, T2>
-    ) -> Result<ApiResponse, crate::errors::Error> 
+    ) -> Result<ApiResponse<SearchResponse<Work>>, crate::errors::Error> 
     where 
         T1: ToString + Clone,
         T2: ToString + Clone,
@@ -313,15 +314,15 @@ impl Api {
     /// This method is primarily used internally by other public methods and might not be directly called by the user.
     ///
     /// Note: This method is private and not exposed to the user directly.
-    fn execute_query<T1, T2>(
+    fn execute_query<T1, T2, T3>(
         &self, 
         query: Query<T1, T2>
-    ) -> Result<ApiResponse, crate::errors::Error> 
+    ) -> Result<ApiResponse<T3>, crate::errors::Error> 
     where 
         T1: ToString + Clone,
         T2: ToString + Clone,
+        T3: DeserializeOwned
     {
-        let retained_query = query.clone(); // for later refernce
         let (req_type, query_uri, body) = query.parse_request();
         
         let target = format!("https://api.core.ac.uk/v3/{}", query_uri);
@@ -357,20 +358,9 @@ impl Api {
             println!("{}", data);
         }
         
-        let deserialized_response = match retained_query {
-            Query::DataProviders(_)         => ApiResponseType::DataProviders(parse_json(&data)?),
-            Query::Discovery(_)             => ApiResponseType::Discovery(parse_json(&data)?),
-            Query::Journals(_)              => ApiResponseType::Journals(parse_json(&data)?),
-            Query::Outputs(_)               => ApiResponseType::Outputs(parse_json(&data)?),
-            Query::SearchWorks(_)           => ApiResponseType::SearchWorks(parse_json(&data)?),
-            Query::SearchOutputs(_)         => ApiResponseType::SearchOutputs(parse_json(&data)?),
-            Query::SearchDataProviders(_)   => ApiResponseType::SearchDataProviders(parse_json(&data)?),
-            Query::SearchJournals(_)        => ApiResponseType::SearchJournals(parse_json(&data)?),
-        };
-    
         Ok(ApiResponse {
             ratelimit_remaining: rate_limit,
-            response: deserialized_response,
+            response: parse_json::<T3>(&data)?,
         })
     }
 

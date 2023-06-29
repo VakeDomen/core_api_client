@@ -5,8 +5,8 @@ use crate::{work::Work, models::{data_provider_models::data_provider::DataProvid
 use super::search::SearchResponse;
 
 #[derive(Debug, Serialize, Deserialize)]
-pub enum ApiResponseType {
-    DataProviders(Option<DataProvider>),
+pub(crate) enum ApiResponseType {
+    DataProviders(DataProvider),
     Discovery(Discovery),
     Journals(Journal),
     Outputs(Work),
