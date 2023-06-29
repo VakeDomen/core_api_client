@@ -42,7 +42,7 @@ impl fmt::Display for IdentifierEntry {
                                      .join(", ");
                 write!(f, "IdentifierWork: [{}]", ids)
             },
-            IdentifierEntry::IdentifierOuputs(doi) => write!(f, "IdentifierOuputs: {}", doi.to_string()), // Assuming DoiIdentifier implements ToString
+            IdentifierEntry::IdentifierOuputs(doi) => write!(f, "IdentifierOuputs: {}", doi), // Assuming DoiIdentifier implements ToString
         }
     }
 }

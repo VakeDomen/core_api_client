@@ -72,10 +72,10 @@ where
             Query::Discovery(data) => write!(f, "Discovery({})", data.to_string()),
             Query::Journals(data) => write!(f, "Journals({})", data.to_string()),
             Query::Outputs(data) => write!(f, "Outputs({})", data.to_string()),
-            Query::SearchWorks(query) => write!(f, "SearchWorks({})", query.to_string()), // assuming SearchQuery also implements ToString
-            Query::SearchOutputs(query) => write!(f, "SearchOutputs({})", query.to_string()),
-            Query::SearchDataProviders(query) => write!(f, "SearchDataProviders({})", query.to_string()),
-            Query::SearchJournals(query) => write!(f, "SearchJournals({})", query.to_string()),
+            Query::SearchWorks(query) => write!(f, "SearchWorks({})", query), // assuming SearchQuery also implements ToString
+            Query::SearchOutputs(query) => write!(f, "SearchOutputs({})", query),
+            Query::SearchDataProviders(query) => write!(f, "SearchDataProviders({})", query),
+            Query::SearchJournals(query) => write!(f, "SearchJournals({})", query),
         }
     }
 }

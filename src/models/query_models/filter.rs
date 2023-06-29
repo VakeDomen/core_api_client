@@ -37,7 +37,8 @@ where
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         // Assuming LogicalOperator and FilterOperator both implement Display or ToString.
         write!(f, "Filter {{ logical_operator: {}, filter_operator: {} }}", 
-               self.logical_operator.to_string(), 
-               self.filter_operator.to_string())
+            self.logical_operator, 
+            self.filter_operator
+        )
     }
 }
