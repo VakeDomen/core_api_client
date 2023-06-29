@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 
-use crate::{empty::Empty, identifier::IdentifierEntry, helpers::string_number_deserializer::deserialize_as_string};
+use crate::{helpers::string_number_deserializer::deserialize_as_string};
 
-use super::{reference::Reference, journal::Journal, author::Author, data_provider::DataProvider, link::LinkType};
+use super::{reference::Reference, journal::Journal, author::Author, data_provider::DataProvider, link::LinkType, identifier::IdentifierEntry, empty::Empty};
 
 
 /// Struct holds the work information. More info on the work struct [here](https://api.core.ac.uk/docs/v3#tag/Works) 

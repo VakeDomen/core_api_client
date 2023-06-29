@@ -1,6 +1,11 @@
 use serde::{Serialize, Deserialize};
 
-use crate::{work::Work, models::{data_provider_models::data_provider::DataProvider, discovery_models::discovery::Discovery}, journal::Journal};
+use crate::{
+    Work, 
+    DataProvider, 
+    Journal, 
+    Discovery
+};
 
 use super::search::SearchResponse;
 
