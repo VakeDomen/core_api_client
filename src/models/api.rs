@@ -3,10 +3,10 @@ use serde::de::DeserializeOwned;
 use crate::{
     helpers::response_handler::{parse_raw_response, parse_json}, 
     responses::{response::ApiResponse, search::SearchResponse}, 
-    SearchQuery, journal::Journal, work::Work, data_provider::DataProvider,
+    SearchQuery, Work, DataProvider,
 };
 
-use super::{query_models::{query::Query, request_type::QueryRequestType}, discovery_models::discovery::Discovery};
+use super::{query_models::{query::Query, request_type::QueryRequestType}, discovery_models::discovery::Discovery, journal_models::journal::Journal};
 
 /// Main API struct. API holds your key you acquire from [CORE](https://core.ac.uk/services/api#form). 
 /// Lastly it holds a refernce to a blocking Client it uses to execute queries to the CORE API.

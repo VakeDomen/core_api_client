@@ -6,7 +6,10 @@ mod responses;
 pub use models::api::Api;
 pub use models::query_models::search_query::SearchQuery;
 pub use models::query_models::filter_operator::FilterOperator;
-pub use models::work_models::*;
+pub use models::work_models::work::Work;
+pub use models::data_provider_models::data_provider::DataProvider;
+pub use models::discovery_models::discovery::Discovery;
+pub use models::journal_models::journal::Journal;
 
 #[cfg(test)]
 mod tests {
