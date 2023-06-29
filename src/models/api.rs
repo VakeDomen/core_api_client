@@ -343,7 +343,7 @@ impl Api {
             (QueryRequestType::Get,     None)                   => client_builer,
             (QueryRequestType::Get,     Some(_))                => client_builer,
             (QueryRequestType::Post,    None)                   => client_builer,
-            (QueryRequestType::Post,    Some(content))  => client_builer.body(content),
+            (QueryRequestType::Post,    Some(content))          => client_builer.body(content),
         };
 
         let response = match client_builder.send() {
