@@ -1,7 +1,7 @@
 use serde::{Deserializer, Deserialize};
 
 /// Custom deserialization function that always deserializes as a string
-pub fn deserialize_as_string<'de, D>(deserializer: D) -> Result<Option<String>, D::Error>
+pub(crate) fn deserialize_as_string<'de, D>(deserializer: D) -> Result<Option<String>, D::Error>
 where
     D: Deserializer<'de>,
 {
