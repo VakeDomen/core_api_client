@@ -2,8 +2,20 @@
 name = "core_api_client"
 version = "0.1.0"
 edition = "2021"
-
+author = "Vake Domen"
+description = "A Rust library for interacting with CORE API, a service that provides access to metadata and full texts of research papers from thousands of data providers."
+readme = "README.md"
+repository = "https://github.com/VakeDomen/core_api_client"
+license = "MIT OR Apache-2.0"
+license-file = "LICENSE.txt"
+keywords = ["API", "client", "articles", "journals", "science"]
+categories = ["web-programming", "web-programming::http-client", "science", "database"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[badges]
+maintenance = { status = "actively-developed" }
+crates-io = { version = "true" }
+docs = { version = "0.1.0" }
 
 [dependencies]
 chrono = "0.4.26"
