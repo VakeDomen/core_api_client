@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Represents a Journal with various associated data.
+/// More information [here](https://api.core.ac.uk/docs/v3#tag/Journals)
 #[derive(Debug, Deserialize, Serialize, PartialEq, PartialOrd, Hash, Default)]
 pub struct Journal {
     /// The various identifiers of the Journal.

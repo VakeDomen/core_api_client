@@ -5,7 +5,7 @@ use crate::{empty::Empty, identifier::IdentifierEntry, helpers::string_number_de
 use super::{reference::Reference, journal::Journal, author::Author, data_provider::DataProvider, link::LinkType};
 
 
-/// Struct holds the work information. More info on the work struct [here](https://api.core.ac.uk/docs/v3#tag/Works/null) 
+/// Struct holds the work information. More info on the work struct [here](https://api.core.ac.uk/docs/v3#tag/Works) 
 #[derive(Debug, Deserialize, Serialize, PartialEq, PartialOrd, Hash, Default)]
 pub struct Work {
     /// Date the work was accepted
