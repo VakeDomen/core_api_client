@@ -1,5 +1,12 @@
 # core_api_client - CORE API Rust Client
 
+[![Crates.io](https://img.shields.io/crates/v/core_api_client.svg)](https://crates.io/crates/core_api_client)
+[![docs.rs](https://docs.rs/core_api_client/badge.svg)](https://docs.rs/core_api_client)
+[![Build](https://github.com/VakeDomen/core_api_client/actions/workflows/build.yml/badge.svg)](https://github.com/VakeDomen/core_api_client/actions)
+[![Test](https://github.com/VakeDomen/core_api_client/actions/workflows/test.yml/badge.svg)](https://github.com/VakeDomen/core_api_client/actions)
+[![Maintenance](https://img.shields.io/badge/Maintenance%20Level-Actively%20Maintained-green.svg)]()
+
+
 A Rust library for interacting with [CORE](https://core.ac.uk/services/api/), a service that provides access to metadata and full texts of research papers from thousands of data providers.
 
 ## Table of Contents
