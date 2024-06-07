@@ -35,7 +35,7 @@ To add the library to your project, add the following to your Cargo.toml:
 
 ```toml
 [dependencies]
-core_api_client = "0.1.0"
+core_api_client = "1.0.0"
 ```
 Then run `cargo build` to download and compile the library.
 
