@@ -209,8 +209,4 @@ Please follow a simple rule for commit messages: Keep them short, but expressive
 
 ## License
 
-<<<<<<< HEAD
 This project is licensed under the Creative Commons License. See the [LICENSE](LICENSE) file for details.
-=======
-This project is licensed under the Creative Commons License. See the [LICENSE](LICENSE) file for details.
->>>>>>> 9f02870105118ec504d9b6e6797803ce1dee8a13

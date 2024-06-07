@@ -1,6 +1,6 @@
 [package]
 name = "core_api_client"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = ["Vake Domen"]
 description = "A Rust library for interacting with CORE API, a service that provides access to metadata and full texts of research papers from thousands of data providers."
