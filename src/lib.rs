@@ -1,7 +1,7 @@
-mod models;
-mod errors;
 mod helpers;
-mod responses;
+pub mod models;
+pub mod errors;
+pub mod responses;
 
 pub use models::api::Api;
 pub use models::query_models::search_query::SearchQuery;

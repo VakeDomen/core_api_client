@@ -10,7 +10,7 @@ use crate::{
 use super::search::SearchResponse;
 
 #[derive(Debug, Serialize, Deserialize)]
-pub(crate) enum ApiResponseType {
+pub enum ApiResponseType {
     DataProviders(DataProvider),
     Discovery(Discovery),
     Journals(Journal),

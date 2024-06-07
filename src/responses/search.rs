@@ -7,23 +7,23 @@ pub struct SearchResponse<T> {
     
     #[serde(rename = "totalHits")]
     #[serde(deserialize_with = "deserialize_limit")]
-    total_hits: Option<i32>,
+    pub total_hits: Option<i32>,
 
 	#[serde(deserialize_with = "deserialize_limit")]
-    limit: Option<i32>,
+    pub limit: Option<i32>,
 	
     #[serde(deserialize_with = "deserialize_limit")]
-    offset: Option<i32>,
+    pub offset: Option<i32>,
 	
     #[serde(rename = "scrollId")]
-    scroll_id: Option<i32>,
+    pub scroll_id: Option<i32>,
 
-	results: Option<Vec<T>>,
+	pub results: Option<Vec<T>>,
     
-    tooks: Option<String>,
+    pub tooks: Option<String>,
 	
     #[serde(rename = "esTook")]
-    es_took: Option<String>,
+    pub es_took: Option<String>,
 }
 
 
