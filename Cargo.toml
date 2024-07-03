@@ -1,6 +1,6 @@
 [package]
 name = "core_api_client"
-version = "1.0.0"
+version = "1.1.0"
 edition = "2021"
 authors = ["Vake Domen"]
 description = "A Rust library for interacting with CORE API, a service that provides access to metadata and full texts of research papers from thousands of data providers."
@@ -14,7 +14,7 @@ categories = ["web-programming", "web-programming::http-client", "science", "dat
 [badges]
 maintenance = { status = "actively-developed" }
 crates-io = { version = "true" }
-docs = { version = "0.1.0" }
+docs = { version = "1.1.0" }
 
 [dependencies]
 chrono = "0.4.26"
