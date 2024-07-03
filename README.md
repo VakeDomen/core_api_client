@@ -209,4 +209,4 @@ Please follow a simple rule for commit messages: Keep them short, but expressive
 
 ## License
 
-This project is licensed under the Creative Commons License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
