@@ -210,3 +210,18 @@ Please follow a simple rule for commit messages: Keep them short, but expressive
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Citation
+If you found this software useful in your research consider citing the paper:
+```
+@article{vake2024core_api_client,
+  title={core\_api\_client: An API for the CORE aggregation service for open access papers},
+  author={Vake, Domen and Hrovatin, Niki and To{\v{s}}i{\'c}, Aleksandar and Vi{\v{c}}i{\v{c}}, Jernej},
+  journal={SoftwareX},
+  volume={28},
+  pages={101907},
+  year={2024},
+  publisher={Elsevier}
+}
+
+```
